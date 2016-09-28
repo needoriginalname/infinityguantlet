@@ -1,0 +1,26 @@
+item.infinitygauntlet:itemInfinityGauntlet.name=Infinity Gauntlet
+item.infinitygauntlet:itemInfinityGem.power.name=Power Gem
+item.infinitygauntlet:itemInfinityGem.space.name=Space Gem
+item.infinitygauntlet:itemInfinityGem.time.name=Time Gem
+item.infinitygauntlet:itemInfinityGem.mind.name=Mind Gem
+item.infinitygauntlet:itemInfinityGem.soul.name=Soul Gem
+item.infinitygauntlet:itemInfinityGem.reality.name=Reality Gem
+
+tile.infinitygauntlet:blockSoulGemTrap.name=Soul Gem Trap
+
+keys.infinitygauntlet.category=Infinity Gauntlet
+keys.infinitygauntlet.changeGemState=Change Gem Mode
+
+death.attack.powergem=%s was obliterated
+death.attack.powergem.player=%s was obliterated by %s
+death.attack.powergem.item=%s was obliterated by %s using %s
+
+
+message.currentmode.power=Current Mode: Power Gem
+message.currentmode.time=Current Mode: Time Gem
+message.currentmode.soul=Current Mode: Soul Gem
+message.currentmode.mind=Current Mode: Mind Gem
+message.currentmode.reality=Current Mode: Reality Gem
+message.currentmode.space=Current Mode: Space Gem
+message.releasedofflineplayer=Player stored is offline, player data adjusted to spawn at that location when he or she logs in
+

@@ -1,0 +1,6 @@
+{
+  "parent": "infinitygauntlet:item/IGItem",
+  "textures": {
+    "layer0": "infinitygauntlet:items/gem_mind"
+  }
+}

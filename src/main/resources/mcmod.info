@@ -1,0 +1,16 @@
+[
+{
+  "modid": "infinitygauntlet",
+  "name": "Infinity Gauntlet",
+  "description": "Adds the Infinity Gauntlet and Gems",
+  "version": "0.1.0b",
+  "mcversion": "1.8",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["needoriginalname"],
+  "credits": "Special Thanks to my Supporters and Followers",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
