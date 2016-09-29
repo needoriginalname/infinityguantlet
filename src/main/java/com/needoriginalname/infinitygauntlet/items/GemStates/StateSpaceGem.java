@@ -5,6 +5,9 @@ import com.needoriginalname.infinitygauntlet.dimension.NonPortalTeleporter;
 import com.needoriginalname.infinitygauntlet.dimension.SpaceGemTeleporter;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.util.NBTHelper;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryEnderChest;
@@ -116,13 +119,19 @@ public class StateSpaceGem extends AbstractGemState{
             int posX = mop.getBlockPos().getX();
             int posY = mop.sideHit == EnumFacing.UP ? mop.getBlockPos().up().up().getY() : mop.getBlockPos().getY();
             int posZ = mop.getBlockPos().getZ();
+            IBlockState state = worldIn.getBlockState(mop.getBlockPos());
+
+            Block b = state.getBlock();
+            int meta = state.getBlock().getMetaFromState(state);
 
             if (playerIn instanceof EntityPlayerMP && !worldIn.isRemote) {
                 EntityPlayerMP entityplayermp = (EntityPlayerMP) playerIn;
 
                 if (entityplayermp.playerNetServerHandler.getNetworkManager().isChannelOpen() && entityplayermp.worldObj == worldIn && !entityplayermp.isPlayerSleeping()) {
                     net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(entityplayermp, posX, posY, posZ, 5.0F);
-                    if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) { // Don't indent to lower patch size
+
+                    //acts like a enderpearl event, can be stopped by stuff that prevents ender pearl teleports
+                    if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) {
 
                         //entityplayermp.playerNetServerHandler.sendPacket(new S29PacketSoundEffect("mob.endermen.portal", entityplayermp.posX, entityplayermp.posY, entityplayermp.posZ, 1.0f, 1.0f));
                         entityplayermp.playerNetServerHandler.sendPacket(new S29PacketSoundEffect("mob.endermen.portal", playerIn.posX , playerIn.posY, playerIn.posZ, 1.0f, 1.0f));
