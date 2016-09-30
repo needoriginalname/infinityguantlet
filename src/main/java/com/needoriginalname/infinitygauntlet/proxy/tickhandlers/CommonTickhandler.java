@@ -1,11 +1,10 @@
 package com.needoriginalname.infinitygauntlet.proxy.tickhandlers;
 
-import com.needoriginalname.infinitygauntlet.InfinityQuantletMod;
-import com.needoriginalname.infinitygauntlet.dimension.NonPortalTeleporter;
 import com.needoriginalname.infinitygauntlet.dimension.SpaceGemTeleporter;
-import com.needoriginalname.infinitygauntlet.util.GraphNode;
+import com.needoriginalname.infinitygauntlet.util.AnimalNode;
+import com.needoriginalname.infinitygauntlet.util.BlockNode;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -25,21 +24,38 @@ public class CommonTickhandler {
         if (event.phase == TickEvent.Phase.END){
             applyDeferredDimensionTransfers();
             applyDeferredBlockReplacements(event.world);
+            applyDeferredAnimalSpawning(event.world);
         }
     }
 
-    private void applyDeferredBlockReplacements(World world) {
-        PriorityQueue<GraphNode> queue = proxy.getDeferredBlockReplacement(world);
+    private void applyDeferredAnimalSpawning(World world) {
+        PriorityQueue<AnimalNode> queue = proxy.getDeferredSpawning(world);
         while (queue != null && !queue.isEmpty()){
             if (queue.peek().getDistance() <= world.getTotalWorldTime()){
-                GraphNode g = queue.poll();
-                if (g.getBlockState() != null) {
-                    world.setBlockState(g.pos, g.getBlockState());
-                } else {
-                    world.setBlockToAir(g.pos);
+                AnimalNode g = queue.poll();
+                if (g.getEntity() != null) {
+                    Entity e = g.getEntity();
+                    e.setPosition(g.getPos().getX()+0.5d, g.getPos().getY(), g.getPos().getZ() + 0.5d);
+                    world.spawnEntityInWorld(g.getEntity());
                 }
-                System.out.print(world);
-                System.out.print(g.pos);
+            } else {
+                break;
+            }
+        }
+
+
+    }
+
+    private void applyDeferredBlockReplacements(World world) {
+        PriorityQueue<BlockNode> queue = proxy.getDeferredBlockReplacement(world);
+        while (queue != null && !queue.isEmpty()){
+            if (queue.peek().getDistance() <= world.getTotalWorldTime()){
+                BlockNode g = queue.poll();
+                if (g.getBlockState() != null) {
+                    world.setBlockState(g.getPos(), g.getBlockState());
+                } else {
+                    world.setBlockToAir(g.getPos());
+                }
             } else {
                 break;
             }

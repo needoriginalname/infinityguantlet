@@ -1,6 +1,5 @@
 package com.needoriginalname.infinitygauntlet.util;
 
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -14,29 +13,31 @@ import java.util.*;
 
 public class BlockSearchHandler {
 
-    public PriorityQueue<GraphNode> getBlocks(World w, BlockPos pos, IBlockState newBlock, int maxDepth, int maxBlocks){
+    public PriorityQueue<BlockNode> getBlocks(World w, BlockPos pos, IBlockState newBlock, int maxDepth, int maxBlocks){
 
 
 
         HashMap<BlockPos, Integer> searchedBlocks;
 
         searchedBlocks =  searchBlocks(maxDepth, maxBlocks, w, pos);
-        PriorityQueue<GraphNode> result = processBlocks(w, searchedBlocks, newBlock);
+        PriorityQueue<BlockNode> result = processBlocks(w, searchedBlocks, newBlock);
 
         return result;
     }
 
-    private PriorityQueue<GraphNode> processBlocks(World w, HashMap<BlockPos, Integer> searchedBlocks, IBlockState newBlock) {
-        PriorityQueue<GraphNode> queue = new PriorityQueue<GraphNode>();
-        PriorityQueue<GraphNode> result = new PriorityQueue<GraphNode>();
+    private PriorityQueue<BlockNode> processBlocks(World w, HashMap<BlockPos, Integer> searchedBlocks, IBlockState newBlock) {
+        PriorityQueue<BlockNode> queue = new PriorityQueue<BlockNode>();
+        PriorityQueue<BlockNode> result = new PriorityQueue<BlockNode>();
+        //takes the searched blocks out and them in a PriorityQueue
         for (BlockPos b : searchedBlocks.keySet()) {
-            queue.add(new GraphNode().setPos(b).setDistance(searchedBlocks.get(b)).setBlockState(newBlock));
+            queue.add(new BlockNode().setPos(b).setDistance(searchedBlocks.get(b)).setBlockState(newBlock));
         }
 
         //sets what time to remove block
         long n = w.getTotalWorldTime();
         while (!queue.isEmpty()){
-            result.add(queue.poll().setDistance(++n));
+            BlockNode node = queue.poll();
+            result.add(node.setDistance(n+node.getDistance()+1));//++n));
         }
         return result;
     }
@@ -74,6 +75,16 @@ public class BlockSearchHandler {
                 list.add(currentPos.south());
                 list.add(currentPos.west());
                 list.add(currentPos.east());
+                list.add(currentPos.up().north());
+                list.add(currentPos.up().south());
+                list.add(currentPos.up().west());
+                list.add(currentPos.up().east());
+                list.add(currentPos.down().north());
+                list.add(currentPos.down().south());
+                list.add(currentPos.down().west());
+                list.add(currentPos.down().east());
+
+
                 for (BlockPos nextPos: list) {
                     //checks to make sure it s block it can replace
                     if (w.getBlockState(nextPos).equals(startingState) && currentNBlocks < maxBlocks && !searchedBlocks.containsKey(nextPos)){

@@ -1,6 +1,7 @@
 package com.needoriginalname.infinitygauntlet.proxy;
 
-import com.needoriginalname.infinitygauntlet.util.GraphNode;
+import com.needoriginalname.infinitygauntlet.util.AnimalNode;
+import com.needoriginalname.infinitygauntlet.util.BlockNode;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
 
@@ -23,7 +24,11 @@ public interface IProxy {
 
     void clearDeferredDimensionTransfers();
 
-    void addDeferredBlockReplacement(World world, PriorityQueue<GraphNode> queue);
+    void addDeferredBlockReplacement(World world, PriorityQueue<BlockNode> queue);
 
-    PriorityQueue<GraphNode> getDeferredBlockReplacement(World world);
+    PriorityQueue<BlockNode> getDeferredBlockReplacement(World world);
+
+    void addDeferredSpawning(World worldIn, PriorityQueue<AnimalNode> animalQueue);
+
+    PriorityQueue<AnimalNode> getDeferredSpawning(World world);
 }

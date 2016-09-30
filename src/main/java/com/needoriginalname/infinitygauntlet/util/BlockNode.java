@@ -1,21 +1,27 @@
 package com.needoriginalname.infinitygauntlet.util;
 
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 
 /**
  * Created by Owner on 9/29/2016.
  */
-public class GraphNode implements Comparable<GraphNode> {
-    public long distence = -1;
-    public BlockPos pos = null;
+public class BlockNode implements Comparable<BlockNode> {
+
+
     private IBlockState block;
 
-    public GraphNode setDistance(long n) {
-        distence = n;
+    public BlockNode setBlockState(IBlockState state){
+        block = state;
         return this;
     }
+
+    public IBlockState getBlockState(){
+        return block;
+    }
+
+    private long distence = -1;
+    private BlockPos pos = null;
 
     public long getDistance(){
         return distence;
@@ -25,22 +31,18 @@ public class GraphNode implements Comparable<GraphNode> {
         return pos;
     }
 
-    public IBlockState getBlockState(){
-        return block;
-    }
-
-    public GraphNode setPos(BlockPos p) {
+    public BlockNode setPos(BlockPos p) {
         pos = p;
         return this;
     }
 
-    public GraphNode setBlockState(IBlockState state){
-        block = state;
+    public BlockNode setDistance(long n) {
+        distence = n;
         return this;
     }
 
     @Override
-    public int compareTo(GraphNode o) {
+    public int compareTo(BlockNode o) {
         if (this.getDistance() > o.getDistance()){
             return 1;
         } else if (this.getDistance() == o.getDistance()){

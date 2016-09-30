@@ -2,12 +2,11 @@ package com.needoriginalname.infinitygauntlet.proxy;
 
 
 import com.needoriginalname.infinitygauntlet.proxy.tickhandlers.CommonTickhandler;
-import com.needoriginalname.infinitygauntlet.util.GraphNode;
+import com.needoriginalname.infinitygauntlet.util.AnimalNode;
+import com.needoriginalname.infinitygauntlet.util.BlockNode;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import scala.Int;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +18,9 @@ import java.util.PriorityQueue;
 public class CommonProxy implements IProxy {
 
     private HashMap scheduledDimTransfers = new HashMap<EntityLivingBase, Integer>();
-    private Map<Integer, PriorityQueue<GraphNode>> scheduleBlockReplacementQueue = new HashMap<Integer, PriorityQueue<GraphNode>>();
+    private Map<Integer, PriorityQueue<BlockNode>> scheduleBlockReplacementQueue = new HashMap<Integer, PriorityQueue<BlockNode>>();
     private CommonTickhandler tickhandler;
+    private Map<Integer, PriorityQueue<AnimalNode>> scheduleAnimalSpawningQueue = new HashMap<Integer, PriorityQueue<AnimalNode>>();
 
     @Override
     public void CreateAndRegisterHandlers(){
@@ -54,22 +54,42 @@ public class CommonProxy implements IProxy {
     }
 
     @Override
-    public void addDeferredBlockReplacement(World world, PriorityQueue<GraphNode> queue) {
+    public void addDeferredBlockReplacement(World world, PriorityQueue<BlockNode> queue) {
         int dimId = world.provider.getDimensionId();
         if (!scheduleBlockReplacementQueue.containsKey(dimId)){
-            scheduleBlockReplacementQueue.put(dimId, new PriorityQueue<GraphNode>());
+            scheduleBlockReplacementQueue.put(dimId, new PriorityQueue<BlockNode>());
         }
-        PriorityQueue<GraphNode> q = scheduleBlockReplacementQueue.get(dimId);
+        PriorityQueue<BlockNode> q = scheduleBlockReplacementQueue.get(dimId);
         q.addAll(queue);
         scheduleBlockReplacementQueue.put(dimId, q);
     }
 
     @Override
-    public PriorityQueue<GraphNode> getDeferredBlockReplacement(World world) {
+    public PriorityQueue<BlockNode> getDeferredBlockReplacement(World world) {
         if (!scheduleBlockReplacementQueue.containsKey(world.provider.getDimensionId())){
             return null;
         } else {
             return scheduleBlockReplacementQueue.get(world.provider.getDimensionId());
         }
+    }
+
+    @Override
+    public PriorityQueue<AnimalNode> getDeferredSpawning(World world) {
+        if (!scheduleAnimalSpawningQueue.containsKey(world.provider.getDimensionId())){
+            return null;
+        } else {
+            return scheduleAnimalSpawningQueue.get(world.provider.getDimensionId());
+        }
+    }
+
+    @Override
+    public void addDeferredSpawning(World worldIn, PriorityQueue<AnimalNode> animalQueue) {
+        int dimId = worldIn.provider.getDimensionId();
+        if (!scheduleAnimalSpawningQueue.containsKey(dimId)){
+            scheduleAnimalSpawningQueue.put(dimId, new PriorityQueue<AnimalNode>());
+        }
+        PriorityQueue<AnimalNode> q = scheduleAnimalSpawningQueue.get(dimId);
+        q.addAll(animalQueue);
+        scheduleAnimalSpawningQueue.put(dimId, q);
     }
 }
