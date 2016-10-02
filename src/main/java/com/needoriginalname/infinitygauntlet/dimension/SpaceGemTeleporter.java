@@ -43,18 +43,29 @@ public class SpaceGemTeleporter extends Teleporter {
 
     public void teleport(EntityLivingBase e){
         if (e instanceof EntityPlayerMP && e.worldObj.provider.getDimensionId() != worldServerInstance.provider.getDimensionId()){
-
-            BlockPos pos = clearTeleportPath(worldServerInstance, e);
+            EntityPlayerMP player = (EntityPlayerMP) e;
+            
+            BlockPos pos = clearTeleportPath(worldServerInstance, player);
+            boolean comingFromEnd = player.dimension == 1;
 
             //stop falling and motion
-            e.motionX = e.motionY = e.motionZ = 0.0D;
-            e.fallDistance = 0;
-            e.setPosition(pos.getX(), pos.getY(), pos.getZ());
+            player.motionX = player.motionY = player.motionZ = 0.0D;
+            player.fallDistance = 0;
+            player.setPosition(pos.getX(), pos.getY(), pos.getZ());
 
             MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) e, worldServerInstance.provider.getDimensionId(), this);
-            e.setPosition(pos.getX(), pos.getY(), pos.getZ());
 
+            //taken from Random Things PlayerUtil, used to provide teleportion logic that is specfic when teleporting from the end.
+            if (comingFromEnd){
+                e.setLocationAndAngles(pos.getX()+.5d, pos.getY()+.5d, pos.getZ()+.5d, player.rotationYaw, player.rotationPitch);
+                player.worldObj.spawnEntityInWorld(e);
+                player.worldObj.updateEntityWithOptionalForce(e, false);
+            }
+            player.removeExperienceLevel(0);
+            player.setPlayerHealthUpdated();
+            
         }
+
     }
 
     private BlockPos clearTeleportPath(World world, EntityLivingBase entity) {

@@ -113,9 +113,7 @@ public class ItemGauntlet extends ItemIG implements IKeyBound {
      */
     @Override
     public void onUsingTick(ItemStack stack, EntityPlayer playerIn, int count) {
-        if (playerIn instanceof EntityPlayerMP
-                && playerIn.getItemInUse() != null
-                && playerIn.getItemInUse().getItem() == this){
+        if (playerIn instanceof EntityPlayerMP){
             EntityPlayerMP player = (EntityPlayerMP) playerIn;
             AbstractGemState state = this.getCurrentGemMode(stack).getGemState();
             if (state == null) return;
