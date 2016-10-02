@@ -9,6 +9,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 public class ClientProxy extends CommonProxy {
     @Override
     public void registerKeyBinding() {
+        KeyBindingHandler.init();
         ClientRegistry.registerKeyBinding(KeyBindingHandler.changeGemState);
 
         super.registerKeyBinding();

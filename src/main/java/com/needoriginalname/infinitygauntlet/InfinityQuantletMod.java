@@ -36,7 +36,7 @@ public class InfinityQuantletMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-        KeyBindingHandler.init();
+
         PacketHandler.registerPackets();
         proxy.registerKeyBinding();
 
