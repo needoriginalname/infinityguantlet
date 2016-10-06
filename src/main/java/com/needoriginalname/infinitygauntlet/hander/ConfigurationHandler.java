@@ -44,6 +44,7 @@ public class ConfigurationHandler {
     public static boolean allowGauntletToControlTicks;
     public static boolean allowGauntletToChangeEntityAgeable;
     public static int soulGemBiomeID;
+    public static short maxDepthOfBlockReplacement;
 
 
     public static void init(File configFile){
@@ -86,6 +87,8 @@ public class ConfigurationHandler {
         infinityGauntletMineSpeed = configuration.getInt("infinityGauntletMineSpeed", Configuration.CATEGORY_GENERAL, 100, 0, Integer.MAX_VALUE, "Amount of damage the Infinity Gauntlet will give when used to mine a block");
         allowGauntletToControlTicks = configuration.getBoolean("allowGauntletToControlTicks", Configuration.CATEGORY_GENERAL, true, "Allow Gauntlet to Set World Time");
         allowGauntletToChangeEntityAgeable = configuration.getBoolean("allowGauntletToChangeEntityAgeable", Configuration.CATEGORY_GENERAL, true, "Allow Gauntlet to change Age of Entity Ageable");
+
+        maxDepthOfBlockReplacement = (short) configuration.getInt("maxDepthOfBlockReplacement", Configuration.CATEGORY_GENERAL, 32, 1, 50, "Max depth of Block replacement algorithm for the Reality Gem");
 
         soulGemDimensionID = configuration.getInt("soulGemDimensionID", Configuration.CATEGORY_GENERAL, -10, Short.MIN_VALUE, Short.MAX_VALUE, "dimension ID for Soul Gem Dimension");
         soulGemBiomeID = configuration.getInt("soulGemBiomeID", Configuration.CATEGORY_GENERAL, 50, 50, Short.MAX_VALUE, "Biome ID for Soul Gem Biome");

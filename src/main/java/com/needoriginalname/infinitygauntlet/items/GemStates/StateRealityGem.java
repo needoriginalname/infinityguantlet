@@ -1,11 +1,11 @@
 package com.needoriginalname.infinitygauntlet.items.GemStates;
 
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
-import com.needoriginalname.infinitygauntlet.util.AnimalNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.AnimalNode;
 import com.needoriginalname.infinitygauntlet.util.BlockSearchHandler;
-import com.needoriginalname.infinitygauntlet.util.BlockNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.BlockNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.BlockReplacementNode;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHardenedClay;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -17,7 +17,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -67,8 +66,17 @@ public class StateRealityGem extends AbstractGemState{
         MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(worldIn, playerIn, true);
 
         if (blockstate != null && mop != null && mop.getBlockPos() != null){
-            PriorityQueue<BlockNode> queue = new BlockSearchHandler().getBlocks(worldIn, mop.getBlockPos(), blockstate, 50, 10000);
-            proxy.addDeferredBlockReplacement(worldIn, queue);
+            proxy.addDeferredAction(new BlockReplacementNode(worldIn.getBlockState(mop.getBlockPos()),
+                    blockstate,
+                    mop.getBlockPos(),
+                    worldIn.getTotalWorldTime() + 1,
+                    worldIn,
+                    playerIn.getDisplayNameString()));
+
+
+
+            //PriorityQueue<BlockNode> queue = new BlockSearchHandler().getBlocks(worldIn, mop.getBlockPos(), blockstate, 50, 10000);
+            //proxy.addDeferredAction(worldIn, queue);
         }
 /*
         EntityLivingBase entity = this.GetTargetEntityLiving(worldIn, playerIn, ConfigurationHandler.seekRangeForEntities);
@@ -203,7 +211,7 @@ public class StateRealityGem extends AbstractGemState{
 
         }
 
-        proxy.addDeferredBlockReplacement(worldIn, blockQueue);
+        //proxy.addDeferredAction(worldIn, blockQueue);
         proxy.addDeferredSpawning(worldIn, animalQueue);
     }
 
@@ -214,7 +222,7 @@ public class StateRealityGem extends AbstractGemState{
             PriorityQueue<BlockNode> queue = new PriorityQueue<BlockNode>();
             IBlockState state = torchBlock.getDefaultState().withProperty(BlockTorch.FACING, mop.sideHit);
             queue.add(new BlockNode().setDistance(worldIn.getTotalWorldTime()+2).setPos(pos).setBlockState(state));
-            proxy.addDeferredBlockReplacement(worldIn, queue);
+            //proxy.addDeferredAction(worldIn, queue);
         }
     }
 

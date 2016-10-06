@@ -1,4 +1,4 @@
-package com.needoriginalname.infinitygauntlet.util;
+package com.needoriginalname.infinitygauntlet.util.nodes;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
@@ -10,6 +10,9 @@ public class BlockNode implements Comparable<BlockNode> {
 
 
     private IBlockState block;
+    private String playerUUID = null;
+    private long distence = -1;
+    private BlockPos pos = null;
 
     public BlockNode setBlockState(IBlockState state){
         block = state;
@@ -20,8 +23,7 @@ public class BlockNode implements Comparable<BlockNode> {
         return block;
     }
 
-    private long distence = -1;
-    private BlockPos pos = null;
+
 
     public long getDistance(){
         return distence;
@@ -50,5 +52,14 @@ public class BlockNode implements Comparable<BlockNode> {
         } else {
             return -1;
         }
+    }
+
+    public String getPlayerUUID() {
+        return playerUUID;
+    }
+
+    public BlockNode setPlayerUUID(String playerUUID) {
+        this.playerUUID = playerUUID;
+        return this;
     }
 }

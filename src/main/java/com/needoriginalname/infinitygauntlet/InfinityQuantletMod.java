@@ -8,6 +8,7 @@ import com.needoriginalname.infinitygauntlet.hander.EventListener;
 import com.needoriginalname.infinitygauntlet.hander.KeyBindingHandler;
 import com.needoriginalname.infinitygauntlet.items.ModItems;
 import com.needoriginalname.infinitygauntlet.network.PacketHandler;
+import com.needoriginalname.infinitygauntlet.proxy.CommonProxy;
 import com.needoriginalname.infinitygauntlet.proxy.IProxy;
 import com.needoriginalname.infinitygauntlet.reference.Reference;
 import net.minecraftforge.common.DimensionManager;
@@ -31,7 +32,7 @@ public class InfinityQuantletMod {
     public static InfinityQuantletMod instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
+    public static CommonProxy proxy;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

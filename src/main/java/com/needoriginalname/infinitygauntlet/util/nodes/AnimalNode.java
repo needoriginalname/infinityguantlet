@@ -1,4 +1,4 @@
-package com.needoriginalname.infinitygauntlet.util;
+package com.needoriginalname.infinitygauntlet.util.nodes;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
@@ -8,7 +8,9 @@ import net.minecraft.util.BlockPos;
  */
 public class AnimalNode implements Comparable<AnimalNode> {
     private Entity e;
-
+    private long distence = -1;
+    private BlockPos pos = null;
+    private String playerUUID = null;
     public Entity getEntity() {
         return e;
     }
@@ -18,8 +20,6 @@ public class AnimalNode implements Comparable<AnimalNode> {
         return this;
     }
 
-    private long distence = -1;
-    private BlockPos pos = null;
 
     public long getDistance(){
         return distence;
@@ -47,5 +47,14 @@ public class AnimalNode implements Comparable<AnimalNode> {
         } else {
             return -1;
         }
+    }
+
+    public String getPlayerUUID() {
+        return playerUUID;
+    }
+
+    public AnimalNode setPlayerUUID(String playerUUID) {
+        this.playerUUID = playerUUID;
+        return this;
     }
 }

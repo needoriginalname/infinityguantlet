@@ -1,7 +1,8 @@
 package com.needoriginalname.infinitygauntlet.proxy;
 
-import com.needoriginalname.infinitygauntlet.util.AnimalNode;
-import com.needoriginalname.infinitygauntlet.util.BlockNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.AnimalNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.BlockNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.BlockReplacementNode;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
 
@@ -31,4 +32,6 @@ public interface IProxy {
     void addDeferredSpawning(World worldIn, PriorityQueue<AnimalNode> animalQueue);
 
     PriorityQueue<AnimalNode> getDeferredSpawning(World world);
+
+    void addDeferredBlockReplacement(BlockReplacementNode node);
 }

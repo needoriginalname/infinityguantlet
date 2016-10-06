@@ -1,5 +1,6 @@
 package com.needoriginalname.infinitygauntlet.util;
 
+import com.needoriginalname.infinitygauntlet.util.nodes.BlockNode;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
