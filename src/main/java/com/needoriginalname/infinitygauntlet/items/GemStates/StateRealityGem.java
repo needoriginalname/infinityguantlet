@@ -3,6 +3,7 @@ package com.needoriginalname.infinitygauntlet.items.GemStates;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.util.nodes.BlockReplacementNode;
 import com.needoriginalname.infinitygauntlet.util.nodes.EntityLivingSpawningNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.TrumpNode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -92,6 +93,9 @@ public class StateRealityGem extends AbstractGemState{
                 FrostwaveShenanigan(worldIn, mop, playerIn);
                 FrostwaveShenanigan(worldIn, mop, playerIn);
                 return true;
+            } else if ((nameTagName.toLowerCase().equals("trump"))){
+                TrumpShenanigan(worldIn, mop);
+                return true;
             }
 
 
@@ -132,6 +136,14 @@ public class StateRealityGem extends AbstractGemState{
 
     }
 
+
+    private void TrumpShenanigan(World w, MovingObjectPosition mop){
+        Integer chainId = new Random().nextInt();
+        proxy.addDeferredAction(new TrumpNode(w, mop.getBlockPos(), w.getTotalWorldTime() + 4, chainId));
+
+
+    }
+
     private void FionaShenanigan(World worldIn, MovingObjectPosition mop, EntityPlayer player) {
         BlockPos pos = mop.getBlockPos();
         Integer chainId = new Random().nextInt();
@@ -139,6 +151,7 @@ public class StateRealityGem extends AbstractGemState{
         //add rainbow blocks
         for (int x = 0; x < 16; ++x){
             int offsetX = x % 2 == 0 ? MathHelper.floor_double(x/2) + 1 : MathHelper.floor_double(x/2);
+            // related to the color values to appear, where 0 is first, seocnd is 1 left, 3rd 1 right, 4th 2 left, etc
             int[] metadatas = {7, 8, 6, 9, 5, 10, 4, 11, 3, 12, 2, 13, 1, 14, 0, 15};
             EnumFacing facingX = x % 2 == 0 ? EnumFacing.WEST : EnumFacing.EAST;
             for (int z = 0; z < 16; z++) {
