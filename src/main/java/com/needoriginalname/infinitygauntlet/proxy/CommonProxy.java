@@ -89,6 +89,7 @@ public class CommonProxy {
         Map<Integer, PriorityQueue<INode>> map2 = deferredActionMap.get(dimId);
         if (!map2.containsKey(node.getChainedId())){
             map2.put(node.getChainedId(), new PriorityQueue<INode>());
+            LogHelper.debug(node.getChainedId() + " chainId has started");
         }
         PriorityQueue<INode> queue =  map2.get(node.getChainedId());
         queue.add(node);

@@ -38,6 +38,7 @@ public class CommonTickhandler {
         }
 
         Map<Integer, PriorityQueue<INode>> chainMap = proxy.getDeferredActionMap().get(dimId);
+        HashSet<Integer> toRemoveSet = new HashSet<Integer>();;
         for (Integer chainId :
                 chainMap.keySet()) {
             PriorityQueue<INode> queue = chainMap.get(chainId);
@@ -52,9 +53,20 @@ public class CommonTickhandler {
                 }
 
 
+            } else {
+                toRemoveSet.add(chainId);
             }
 
         }
+
+        for (Integer chainId: toRemoveSet){
+            ScheduleOverloadHandler.clear(chainId);
+            chainMap.remove(chainId);
+            LogHelper.debug(chainId + " has been ended.");
+        }
+
+        toRemoveSet.clear();
+
     }
 
 
