@@ -10,14 +10,14 @@ import net.minecraft.world.World;
 abstract class Node implements INode {
     private final World w;
     private final BlockPos pos;
-    private final long distance;
-    private final String username;
+    private final Integer id;
+    private long distance;
 
-    Node(World w, BlockPos pos, long distance, String username) {
+    Node(World w, BlockPos pos, long distance,@NotNull Integer id) {
         this.w = w;
         this.pos = pos;
         this.distance = distance;
-        this.username = username;
+        this.id = id;
     }
 
     @Override
@@ -42,8 +42,13 @@ abstract class Node implements INode {
     }
 
     @Override
-    public String getPlayerUsername() {
-        return username;
+    public void setDistance(long d){
+        this.distance = d;
+    }
+
+    @Override
+    public Integer getChainedId() {
+        return id;
     }
 
 

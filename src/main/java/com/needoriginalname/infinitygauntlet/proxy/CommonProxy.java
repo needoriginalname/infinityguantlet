@@ -1,17 +1,14 @@
 package com.needoriginalname.infinitygauntlet.proxy;
 
 
+import com.needoriginalname.infinitygauntlet.hander.ScheduleOverloadHandler;
 import com.needoriginalname.infinitygauntlet.proxy.tickhandlers.CommonTickhandler;
-import com.needoriginalname.infinitygauntlet.util.nodes.AnimalNode;
-import com.needoriginalname.infinitygauntlet.util.nodes.BlockNode;
+import com.needoriginalname.infinitygauntlet.util.LogHelper;
 import com.needoriginalname.infinitygauntlet.util.nodes.INode;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Created by Al on 5/12/2015.
@@ -19,15 +16,16 @@ import java.util.PriorityQueue;
 public class CommonProxy {
 
     private HashMap scheduledDimTransfers = new HashMap<EntityLivingBase, Integer>();
-    private Map<Integer, PriorityQueue<BlockNode>> scheduleBlockReplacementQueue = new HashMap<Integer, PriorityQueue<BlockNode>>();
     private CommonTickhandler tickhandler;
-    private Map<Integer, PriorityQueue<AnimalNode>> scheduleAnimalSpawningQueue = new HashMap<Integer, PriorityQueue<AnimalNode>>();
+    private Queue<INode> Buffer = new LinkedList<INode>();
 
-    public Map<String, PriorityQueue<INode>> getDeferredActionMap() {
+    public Map<Integer, Map<Integer, PriorityQueue<INode>>>getDeferredActionMap() {
         return deferredActionMap;
     }
+    //worldId -> chainId -> actionNodes
+    private Map<Integer, Map<Integer, PriorityQueue<INode>>> deferredActionMap = new HashMap<Integer, Map<Integer, PriorityQueue<INode>>>();
 
-    private Map<String, PriorityQueue<INode>> deferredActionMap = new HashMap<String, PriorityQueue<INode>>();
+    //private Map<Integer, PriorityQueue<INode>> deferredActionMap = new HashMap<Integer, PriorityQueue<INode>>();
 
     public void CreateAndRegisterHandlers(){
         tickhandler = new CommonTickhandler();
@@ -63,45 +61,44 @@ public class CommonProxy {
     
 
     
-    public PriorityQueue<BlockNode> getDeferredBlockReplacement(World world) {
-        if (!scheduleBlockReplacementQueue.containsKey(world.provider.getDimensionId())){
-            return null;
-        } else {
-            return scheduleBlockReplacementQueue.get(world.provider.getDimensionId());
-        }
-    }
+
 
     
-    public PriorityQueue<AnimalNode> getDeferredSpawning(World world) {
-        if (!scheduleAnimalSpawningQueue.containsKey(world.provider.getDimensionId())){
-            return null;
-        } else {
-            return scheduleAnimalSpawningQueue.get(world.provider.getDimensionId());
-        }
-    }
+
 
     
     public void addDeferredAction(INode node) {
-        String username = node.getPlayerUsername();
-        if (username == null) username = "herobrine";
-        if (!deferredActionMap.containsKey(node.getPlayerUsername())){
-            deferredActionMap.put(username, new PriorityQueue<INode>());
+
+        /*
+        if (!deferredActionMap.containsKey(node.getChainedId())){
+            deferredActionMap.put(node.getChainedId(), new PriorityQueue<INode>());
+        }*/
+        int dimId = node.getWorld().provider.getDimensionId();
+        if (!deferredActionMap.containsKey(dimId)){
+            deferredActionMap.put(dimId, new HashMap<Integer, PriorityQueue<INode>>());
         }
 
-        deferredActionMap.get(username).add(node);
+        long c1 = node.getDistance();
+        node = ScheduleOverloadHandler.handle(node);
+        long c2 = node.getDistance();
 
+        if (c1 != c2){
+            LogHelper.debug("node adjusted from " + c1 + " to " + c2);
+        }
+
+        Map<Integer, PriorityQueue<INode>> map2 = deferredActionMap.get(dimId);
+        if (!map2.containsKey(node.getChainedId())){
+            map2.put(node.getChainedId(), new PriorityQueue<INode>());
+        }
+        PriorityQueue<INode> queue =  map2.get(node.getChainedId());
+        queue.add(node);
+
+
+
+        /*
+        deferredActionMap.get(node.getChainedId()).add(node);
+        */
     }
 
 
-
-    
-    public void addDeferredSpawning(World worldIn, PriorityQueue<AnimalNode> animalQueue) {
-        int dimId = worldIn.provider.getDimensionId();
-        if (!scheduleAnimalSpawningQueue.containsKey(dimId)){
-            scheduleAnimalSpawningQueue.put(dimId, new PriorityQueue<AnimalNode>());
-        }
-        PriorityQueue<AnimalNode> q = scheduleAnimalSpawningQueue.get(dimId);
-        q.addAll(animalQueue);
-        scheduleAnimalSpawningQueue.put(dimId, q);
-    }
 }

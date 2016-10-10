@@ -1,6 +1,7 @@
 package com.needoriginalname.infinitygauntlet.util.nodes;
 
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
+import com.sun.istack.internal.NotNull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -31,11 +32,11 @@ public class BlockReplacementNode extends Node {
      * @param pos Position of where it will occur
      * @param distance World tick to do this
      * @param w World that this action will occur on.
-     * @param user the username of the block this was created by, if applicable
+     * @param chainId the username of the block this was created by, if applicable
      */
-    public BlockReplacementNode(IBlockState oldState, IBlockState newState, BlockPos pos, long distance, World w, @Nullable String user){
-        this(oldState, newState, pos, distance, w, user, ConfigurationHandler.maxDepthOfBlockReplacement);
-        EntityPlayerMP e;
+    public BlockReplacementNode(IBlockState oldState, IBlockState newState, BlockPos pos, long distance, World w, @NotNull Integer chainId){
+        this(oldState, newState, pos, distance, w, chainId, ConfigurationHandler.maxDepthOfBlockReplacement);
+
     }
 
     /**
@@ -44,11 +45,11 @@ public class BlockReplacementNode extends Node {
      * @param pos Position of where it will occur
      * @param distance World tick to do this
      * @param w World that this action will occur on.
-     * @param user the username of the block this was created by, if applicable
+     * @param chainId the username of the block this was created by, if applicable
      * @param maxDepthOfBlockReplacement the Max depth that this will recurisvly look from each last one.
      */
-    public BlockReplacementNode(IBlockState oldState, IBlockState newState, BlockPos pos, long distance, World w, @Nullable String user, short maxDepthOfBlockReplacement) {
-        super(w, pos, distance, user);
+    public BlockReplacementNode(IBlockState oldState, IBlockState newState, BlockPos pos, long distance, World w, @NotNull Integer chainId, short maxDepthOfBlockReplacement) {
+        super(w, pos, distance, chainId);
         this.oldState = oldState;
         this.newState = newState;
         this.maxDepth = maxDepthOfBlockReplacement;
@@ -77,7 +78,22 @@ public class BlockReplacementNode extends Node {
                 poses.add(getBlockPos().down());
 
                 for (BlockPos pos : poses) {
-                    BlockReplacementNode node = new BlockReplacementNode(oldState, newState, pos, getNextTime(), getWorld(), getPlayerUsername(), (short)(getGenerationsLeft() - 1) );
+                    BlockReplacementNode node = new BlockReplacementNode(oldState, newState, pos, getNextTime(), getWorld(), getChainedId(), (short)(getGenerationsLeft() - 1) );
+                    proxy.addDeferredAction(node);
+                }
+
+                poses.clear();
+                poses.add(getBlockPos().up().north());
+                poses.add(getBlockPos().up().south());
+                poses.add(getBlockPos().up().east());
+                poses.add(getBlockPos().up().west());
+                poses.add(getBlockPos().down().north());
+                poses.add(getBlockPos().down().south());
+                poses.add(getBlockPos().down().east());
+                poses.add(getBlockPos().down().west());
+
+                for (BlockPos pos : poses) {
+                    BlockReplacementNode node = new BlockReplacementNode(oldState, newState, pos, getNextTime() + 1, getWorld(), getChainedId(), (short)(getGenerationsLeft() - 1) );
                     proxy.addDeferredAction(node);
                 }
 

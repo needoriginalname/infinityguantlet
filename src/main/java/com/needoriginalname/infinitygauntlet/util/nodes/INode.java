@@ -12,5 +12,6 @@ public interface INode extends Comparable<INode> {
     World getWorld();
     BlockPos getBlockPos();
     long getDistance();
-    String getPlayerUsername();
+    void setDistance(long d);
+    Integer getChainedId();
 }

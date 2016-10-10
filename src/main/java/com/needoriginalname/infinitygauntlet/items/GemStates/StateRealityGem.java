@@ -1,14 +1,12 @@
 package com.needoriginalname.infinitygauntlet.items.GemStates;
 
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
-import com.needoriginalname.infinitygauntlet.util.nodes.AnimalNode;
-import com.needoriginalname.infinitygauntlet.util.BlockSearchHandler;
-import com.needoriginalname.infinitygauntlet.util.nodes.BlockNode;
 import com.needoriginalname.infinitygauntlet.util.nodes.BlockReplacementNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.EntityLivingSpawningNode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.passive.EntitySheep;
@@ -26,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 
@@ -65,30 +62,20 @@ public class StateRealityGem extends AbstractGemState{
         }
         MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(worldIn, playerIn, true);
 
+        Integer id = new Random().nextInt();
+
         if (blockstate != null && mop != null && mop.getBlockPos() != null){
             proxy.addDeferredAction(new BlockReplacementNode(worldIn.getBlockState(mop.getBlockPos()),
                     blockstate,
                     mop.getBlockPos(),
                     worldIn.getTotalWorldTime() + 1,
                     worldIn,
-                    playerIn.getDisplayNameString()));
+                    id));
 
 
 
-            //PriorityQueue<BlockNode> queue = new BlockSearchHandler().getBlocks(worldIn, mop.getBlockPos(), blockstate, 50, 10000);
-            //proxy.addDeferredAction(worldIn, queue);
-        }
-/*
-        EntityLivingBase entity = this.GetTargetEntityLiving(worldIn, playerIn, ConfigurationHandler.seekRangeForEntities);
-        if (entity instanceof EntityPlayer){
-            EntityPlayer otherPlayer = (EntityPlayer) entity;
-            if (otherPlayer.capabilities.isCreativeMode){
-                otherPlayer.setGameType(WorldSettings.GameType.SURVIVAL);
-            }
         }
 
-        super.onPlayerStoppedUsing(stack, worldIn, playerIn, timeLeft);
-        */
     }
 
     private boolean shenanigans(ItemStack stack, World worldIn, EntityPlayer playerIn, ItemStack stackInSlot) {
@@ -96,13 +83,14 @@ public class StateRealityGem extends AbstractGemState{
             MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(worldIn, playerIn, true);
             String nameTagName = stackInSlot.getDisplayName();
             if (nameTagName.toLowerCase().equals("bluexephos")){
-                BlueXephosShenanigan(worldIn, mop);
+                BlueXephosShenanigan(worldIn, mop, playerIn);
                 return true;
             } else if ((nameTagName.toLowerCase().equals("saberial") || (nameTagName.toLowerCase().equals("fiona")))){
-                FionaShenanigan(worldIn, mop);
+                FionaShenanigan(worldIn, mop, playerIn);
                 return true;
             } else if ((nameTagName.toLowerCase().equals("frostwave"))){
-                FrostwaveShenanigan(worldIn, mop);
+                FrostwaveShenanigan(worldIn, mop, playerIn);
+                FrostwaveShenanigan(worldIn, mop, playerIn);
                 return true;
             }
 
@@ -112,20 +100,19 @@ public class StateRealityGem extends AbstractGemState{
         return false;
     }
 
-    private void FrostwaveShenanigan(World worldIn, MovingObjectPosition mop){
+    private void FrostwaveShenanigan(World worldIn, MovingObjectPosition mop, EntityPlayer player){
         BlockPos pos = mop.getBlockPos().offset(mop.sideHit);
 
-        PriorityQueue<AnimalNode> queue = new PriorityQueue<AnimalNode>();
+        Integer chainId = new Random().nextInt();
 
         EntityDragon dragon = new EntityDragon(worldIn);
         EntityWither wither = new EntityWither(worldIn);
         EntityDragon dragon2 = new EntityDragon(worldIn);
         EntityWither wither2 = new EntityWither(worldIn);
 
-        dragon2.setCustomNameTag("Grumm");
         wither2.setCustomNameTag("Grumm");
 
-        Queue<Entity> q = new LinkedList<Entity>();
+        Queue<EntityLiving> q = new LinkedList<EntityLiving>();
         q.add(dragon);
         q.add(wither);
         q.add(dragon2);
@@ -135,19 +122,19 @@ public class StateRealityGem extends AbstractGemState{
         long t = worldIn.getTotalWorldTime();
 
         while (!q.isEmpty()){
-            Entity e = q.poll();
+            EntityLiving e = q.poll();
             e.setPosition(pos.getX() + 0.5d, pos.getY(), pos.getZ()+0.5d);
             t += 200;
-            queue.add(new AnimalNode().setPos(pos).setEntity(e).setDistance(t));
+            proxy.addDeferredAction(new EntityLivingSpawningNode(e, worldIn, pos, t, chainId));
         }
 
-        proxy.addDeferredSpawning(worldIn, queue);
+
 
     }
 
-    private void FionaShenanigan(World worldIn, MovingObjectPosition mop) {
+    private void FionaShenanigan(World worldIn, MovingObjectPosition mop, EntityPlayer player) {
         BlockPos pos = mop.getBlockPos();
-        PriorityQueue<BlockNode> blockQueue = new PriorityQueue<BlockNode>();
+        Integer chainId = new Random().nextInt();
         long timeToAdd = 0;
         //add rainbow blocks
         for (int x = 0; x < 16; ++x){
@@ -164,12 +151,13 @@ public class StateRealityGem extends AbstractGemState{
                 //used to determine when to add continue
                 if (timeToAdd < priority) timeToAdd = priority;
 
-                BlockNode node = new BlockNode().setBlockState(state).setPos(currentPos).setDistance(priority);
-                BlockNode node2 = new BlockNode().setBlockState(null).setPos(currentPos.up()).setDistance(priority);
-                BlockNode node3 = new BlockNode().setBlockState(null).setPos(currentPos.up(2)).setDistance(priority);
-                blockQueue.add(node);
-                blockQueue.add(node2);
-                blockQueue.add(node3);
+                BlockReplacementNode node = new BlockReplacementNode(null, state,  currentPos, priority, worldIn, chainId, (short)0);
+                BlockReplacementNode node2 = new BlockReplacementNode(null, Blocks.air.getDefaultState(),  currentPos.up(), priority, worldIn, chainId, (short) 0);
+                BlockReplacementNode node3 = new BlockReplacementNode(null, Blocks.air.getDefaultState(),  currentPos.up(2), priority, worldIn, chainId, (short)0);
+
+                proxy.addDeferredAction(node);
+                proxy.addDeferredAction(node2);
+                proxy.addDeferredAction(node3);
 
             }
         }
@@ -179,23 +167,20 @@ public class StateRealityGem extends AbstractGemState{
         timeToAdd += 5;
         IBlockState state = Blocks.oak_fence.getDefaultState();
         for (int i = 0; i < 16; ++i){
-            BlockPos a = topLeft.east(i);
-            BlockPos b = topLeft.south(i);
-            BlockPos c = topRight.west(i);
-            BlockPos d = topRight.north(i);
-            blockQueue.add(new BlockNode().setDistance(timeToAdd).setPos(a).setBlockState(state));
-            blockQueue.add(new BlockNode().setDistance(timeToAdd).setPos(b).setBlockState(state));
-            blockQueue.add(new BlockNode().setDistance(timeToAdd).setPos(c).setBlockState(state));
-            blockQueue.add(new BlockNode().setDistance(timeToAdd).setPos(d).setBlockState(state));
-
-
-
+            BlockReplacementNode node1 = new BlockReplacementNode(null, state,  topLeft.east(i), timeToAdd, worldIn, chainId, (short)0);
+            BlockReplacementNode node2 = new BlockReplacementNode(null, state,  topLeft.south(i), timeToAdd, worldIn, chainId, (short) 0);
+            BlockReplacementNode node3 = new BlockReplacementNode(null, state,  topRight.west(i), timeToAdd, worldIn, chainId, (short)0);
+            BlockReplacementNode node4 = new BlockReplacementNode(null, state,  topRight.north(i), timeToAdd, worldIn, chainId, (short)0);
+            proxy.addDeferredAction(node1);
+            proxy.addDeferredAction(node2);
+            proxy.addDeferredAction(node3);
+            proxy.addDeferredAction(node4);
             ++timeToAdd;
 
 
         }
 
-        PriorityQueue<AnimalNode> animalQueue = new PriorityQueue<AnimalNode>();
+
         BlockPos spawnSheepAreaBase = pos.up();
         Random r = new Random();
         for (EnumDyeColor color : EnumDyeColor.values()) {
@@ -207,21 +192,21 @@ public class StateRealityGem extends AbstractGemState{
             sheep.setAlwaysRenderNameTag(false);
             // 1 second after building, add sheep every 1/4 second
             timeToAdd += 5;
-            animalQueue.add(new AnimalNode().setEntity(sheep).setPos(spawnSheepArea).setDistance(timeToAdd ));
+            EntityLivingSpawningNode node = new EntityLivingSpawningNode(sheep, worldIn, spawnSheepArea, timeToAdd, chainId);
+            proxy.addDeferredAction(node);
 
         }
 
         //proxy.addDeferredAction(worldIn, blockQueue);
-        proxy.addDeferredSpawning(worldIn, animalQueue);
     }
 
-    private void BlueXephosShenanigan(World worldIn, MovingObjectPosition mop) {
+    private void BlueXephosShenanigan(World worldIn, MovingObjectPosition mop, EntityPlayer player) {
         BlockPos pos = mop.getBlockPos().offset(mop.sideHit);
         BlockTorch torchBlock = (BlockTorch) Block.getBlockFromName("torch");
         if (torchBlock.canPlaceBlockAt(worldIn, pos)){
-            PriorityQueue<BlockNode> queue = new PriorityQueue<BlockNode>();
             IBlockState state = torchBlock.getDefaultState().withProperty(BlockTorch.FACING, mop.sideHit);
-            queue.add(new BlockNode().setDistance(worldIn.getTotalWorldTime()+2).setPos(pos).setBlockState(state));
+            BlockReplacementNode node = new BlockReplacementNode(null, state, pos, worldIn.getTotalWorldTime() + 2, worldIn, new Random().nextInt());
+            proxy.addDeferredAction(node);
             //proxy.addDeferredAction(worldIn, queue);
         }
     }
