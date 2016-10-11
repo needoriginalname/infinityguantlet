@@ -26,7 +26,6 @@ public class ConfigurationHandler {
     public static boolean isRealityGauntletGemEnabled;
     public static int seekRangeForEntities;
     public static int seekRangeForBlocks;
-    public static int seekNewTargetRange;
     public static int powerGemRarity;
     public static int soulGemRarity;
     public static int realityGemRarity;
@@ -40,11 +39,11 @@ public class ConfigurationHandler {
     public static int infinityGauntletBurnTime;
     public static int infinityGauntletMineSpeed;
     public static int soulGemDimensionID;
-    public static int[] supportedDimensionIDs;
-    public static boolean allowGauntletToControlTicks;
     public static boolean allowGauntletToChangeEntityAgeable;
     public static int soulGemBiomeID;
     public static short maxDepthOfBlockReplacement;
+    public static int maxActionsPerTick;
+    public static int[] supportedDimensionIDs;
 
 
     public static void init(File configFile){
@@ -61,7 +60,6 @@ public class ConfigurationHandler {
         isSpaceGemEnabled = configuration.getBoolean("isSpaceGemEnabled", Configuration.CATEGORY_GENERAL, true, "Enable the Space Gem's abilities");
         isTimeGemEnabled = configuration.getBoolean("isTimeGemEnabled", Configuration.CATEGORY_GENERAL, true, "Enable the Time Gem's abilities");
         isRealityGemEnabled = configuration.getBoolean("isRealityGemEnabled", Configuration.CATEGORY_GENERAL, true, "Enable the Reality Gem's abilities");
-        seekNewTargetRange = configuration.getInt("seekNewTargetRange", Configuration.CATEGORY_GENERAL, 32, 0, 128, "The distance of which a mob will look for a new target");
 
         powerGemRarity = configuration.getInt("powerGemRarity", Configuration.CATEGORY_GENERAL, 2, 0, 10, "Chance for Power Gem to spawn in Dungions, 1 is same chance for Golden Apple, 10 is same chance for bread");
         soulGemRarity = configuration.getInt("soulGemRarity", Configuration.CATEGORY_GENERAL, 2, 0, 10, "Chance for Soul Gem to spawn in Dungions, 1 is same chance for Golden Apple, 10 is same chance for bread");
@@ -85,13 +83,15 @@ public class ConfigurationHandler {
         powerGemBurnTime = configuration.getInt("powerGemBurnTime", Configuration.CATEGORY_GENERAL, 1600, 0, 72000, "The Burn time the Power Gem will have in a furnace, does not use up item.");
         infinityGauntletBurnTime = configuration.getInt("infinityGauntletBurnTime", Configuration.CATEGORY_GENERAL, 1600, 0, 72000, "The Burn time the Infinity Gauntlet will have in a furnace, does not use up item");
         infinityGauntletMineSpeed = configuration.getInt("infinityGauntletMineSpeed", Configuration.CATEGORY_GENERAL, 100, 0, Integer.MAX_VALUE, "Amount of damage the Infinity Gauntlet will give when used to mine a block");
-        allowGauntletToControlTicks = configuration.getBoolean("allowGauntletToControlTicks", Configuration.CATEGORY_GENERAL, true, "Allow Gauntlet to Set World Time");
-        allowGauntletToChangeEntityAgeable = configuration.getBoolean("allowGauntletToChangeEntityAgeable", Configuration.CATEGORY_GENERAL, true, "Allow Gauntlet to change Age of Entity Ageable");
+         allowGauntletToChangeEntityAgeable = configuration.getBoolean("allowGauntletToChangeEntityAgeable", Configuration.CATEGORY_GENERAL, true, "Allow Gauntlet to change Age of Entity Ageable");
 
         maxDepthOfBlockReplacement = (short) configuration.getInt("maxDepthOfBlockReplacement", Configuration.CATEGORY_GENERAL, 32, 1, 50, "Max depth of Block replacement algorithm for the Reality Gem");
+        maxActionsPerTick = configuration.getInt("maxActionsPerTick", Configuration.CATEGORY_GENERAL, 15, 1, 50, "Limits the number of actions per tick per player action");
 
         soulGemDimensionID = configuration.getInt("soulGemDimensionID", Configuration.CATEGORY_GENERAL, -10, Short.MIN_VALUE, Short.MAX_VALUE, "dimension ID for Soul Gem Dimension");
         soulGemBiomeID = configuration.getInt("soulGemBiomeID", Configuration.CATEGORY_GENERAL, 50, 50, Short.MAX_VALUE, "Biome ID for Soul Gem Biome");
+
+
 
         String[] defaultDim = new String[3];
         defaultDim[0] = "0"; defaultDim[1] = "-1"; defaultDim[2] = "1";

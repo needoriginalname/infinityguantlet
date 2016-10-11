@@ -1,5 +1,6 @@
 package com.needoriginalname.infinitygauntlet.util.nodes;
 
+import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.sun.istack.internal.NotNull;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -14,7 +15,7 @@ public class TrumpNode extends Node {
     private final int maxCount;
 
     public TrumpNode(World w, BlockPos pos, long distance, @NotNull Integer id) {
-        this(w, pos, distance, id, 5000);
+        this(w, pos, distance, id, ConfigurationHandler.maxDepthOfBlockReplacement);
     }
 
     TrumpNode(World w, BlockPos pos, long distance, @NotNull Integer id, int maxCount) {

@@ -75,14 +75,14 @@ public class StateTimeGem extends AbstractGemState{
 
                 EntityLivingBase e = GetTargetEntityLiving(worldIn, playerIn, this.entitySeekRange);
 
-                if (e != null && e instanceof EntityAgeable) {
+                if (ConfigurationHandler.allowGauntletToChangeEntityAgeable && e != null && e instanceof EntityAgeable) {
                     if (!e.isChild()) {
                         ((EntityAgeable) e).setGrowingAge(-24000);
 
                     } else {
                         ((EntityAgeable) e).setGrowingAge(24000);
                     }
-                } else if (e instanceof EntityHorse && !((EntityHorse) e).isUndead()) {
+                } else if (ConfigurationHandler.allowGauntletToChangeEntityAgeable && e instanceof EntityHorse && !((EntityHorse) e).isUndead()) {
                     if (!e.isChild()) {
                         ((EntityHorse) e).setGrowingAge(-24000);
 

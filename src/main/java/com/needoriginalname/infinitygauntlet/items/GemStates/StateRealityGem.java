@@ -34,6 +34,9 @@ import java.util.Random;
 import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
 
 /**
+ * Controls the Reality Gem's functionality
+ *
+ *
  * Created by Al on 5/16/2015.
  */
 public class StateRealityGem extends AbstractGemState{

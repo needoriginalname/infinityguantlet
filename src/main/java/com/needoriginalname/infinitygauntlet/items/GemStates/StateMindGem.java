@@ -26,6 +26,12 @@ import java.util.List;
  */
 public class StateMindGem extends AbstractGemState {
 
+
+    @Override
+    public boolean isGauntletTypeEnabled() {
+        return ConfigurationHandler.isMindGemGauntletEnabled;
+    }
+
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
         EntityLivingBase entity = this.GetTargetEntityLiving(worldIn, playerIn, ConfigurationHandler.seekRangeForEntities);
@@ -142,7 +148,7 @@ public class StateMindGem extends AbstractGemState {
 
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
 
-        if (ConfigurationHandler.isSoulGemEnabled) {
+        if (ConfigurationHandler.isMindGemEnabled) {
             if (!playerIn.isSneaking()) {
                 if (!attackTarget(itemStackIn, worldIn, playerIn)) {
                     setAttacker(itemStackIn, worldIn, playerIn);

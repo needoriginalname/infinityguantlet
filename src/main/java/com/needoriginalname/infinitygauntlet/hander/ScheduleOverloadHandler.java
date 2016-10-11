@@ -19,10 +19,12 @@ public class ScheduleOverloadHandler {
 
 
 
-    private static int maxCount = 50;
+
 
 
     public static INode handle(INode node) {
+
+        int maxCount = ConfigurationHandler.maxActionsPerTick;
 
         if (maxCount == 0 || node.getChainedId() == null) return node;
 

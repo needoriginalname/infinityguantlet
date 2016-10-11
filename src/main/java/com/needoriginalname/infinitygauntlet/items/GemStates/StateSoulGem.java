@@ -36,7 +36,7 @@ public class StateSoulGem extends AbstractGemState{
 
     @Override
     public boolean isGauntletTypeEnabled() {
-        return ConfigurationHandler.isMindGemGauntletEnabled;
+        return ConfigurationHandler.isSoulGemGauntletEnabled;
     }
 
     @Override
@@ -222,7 +222,7 @@ public class StateSoulGem extends AbstractGemState{
     @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
 
-        if ((itemStackIn != null && !worldIn.isRemote && playerIn != null)) {
+        if (ConfigurationHandler.isSoulGemEnabled && (itemStackIn != null && !worldIn.isRemote && playerIn != null)) {
             EntityLivingBase e = this.GetTargetEntityLiving(worldIn, playerIn, this.entitySeekRange);
             MovingObjectPosition mop = getMovingObjectPositionFromPlayer(worldIn, playerIn, false);
             BlockPos pos = mop != null ? mop.getBlockPos() : null;

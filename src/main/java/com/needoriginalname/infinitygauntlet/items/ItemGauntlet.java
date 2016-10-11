@@ -35,7 +35,7 @@ import java.util.List;
 public class ItemGauntlet extends ItemIG implements IKeyBound {
     ItemGauntlet(){
         this.setMaxStackSize(1);
-        this.setCreativeTab(CreativeTabs.tabAllSearch);
+        //this.setCreativeTab(CreativeTabs.tabAllSearch);
         this.setUnlocalizedName(Names.InfinityGauntlet);
         this.hasSubtypes = false;
 
