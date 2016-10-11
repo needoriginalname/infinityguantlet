@@ -7,9 +7,12 @@ import com.needoriginalname.infinitygauntlet.util.nodes.TrumpNode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -113,7 +116,7 @@ public class StateRealityGem extends AbstractGemState{
         EntityWither wither = new EntityWither(worldIn);
         EntityDragon dragon2 = new EntityDragon(worldIn);
         EntityWither wither2 = new EntityWither(worldIn);
-
+        wither.setCustomNameTag("Grumm");
         wither2.setCustomNameTag("Grumm");
 
         Queue<EntityLiving> q = new LinkedList<EntityLiving>();
@@ -130,6 +133,29 @@ public class StateRealityGem extends AbstractGemState{
             e.setPosition(pos.getX() + 0.5d, pos.getY(), pos.getZ()+0.5d);
             t += 200;
             proxy.addDeferredAction(new EntityLivingSpawningNode(e, worldIn, pos, t, chainId));
+        }
+
+        for (int i = 0; i < 25; i++){
+            EntityLiving e;
+            int n = new Random().nextInt(5);
+            if (n == 0){
+                e = new EntityCreeper(worldIn);
+            } else if (n == 1){
+                e = new EntityBlaze(worldIn);
+            } else if (n == 2){
+                e = new EntityEnderman(worldIn);
+            } else if (n == 3){
+                e = new EntityGhast(worldIn);
+            } else{
+                e = new EntityRabbit(worldIn);
+                ((EntityRabbit)e).setRabbitType(99);
+            }
+
+            if (new Random().nextInt(2) == 0)
+                e.setCustomNameTag("Grumm");
+            proxy.addDeferredAction(new EntityLivingSpawningNode(e, worldIn, pos, t, chainId));
+
+
         }
 
 
