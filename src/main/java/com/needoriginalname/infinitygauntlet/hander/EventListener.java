@@ -60,7 +60,7 @@ public class EventListener {
         List list = event.entity.worldObj.getEntitiesWithinAABBExcludingEntity(event.target, event.entity.getEntityBoundingBox().expand(range,4,range));
 
         for (Object o : list){
-            if (o instanceof EntityLiving && !(o instanceof EntityAmbientCreature)){
+            if (o instanceof EntityLivingBase && !(o instanceof EntityAmbientCreature)){
                 if (o instanceof EntityPlayer && this.canTarget((EntityPlayer) o)) {
 
 
@@ -68,6 +68,8 @@ public class EventListener {
 
                     ((EntityLiving) event.entity).setRevengeTarget((EntityLivingBase) o);
                     return;
+                } else if (!(o instanceof  EntityPlayer)){
+                    ((EntityLiving) event.entity).setRevengeTarget((EntityLivingBase) o);
                 }
             }
         }

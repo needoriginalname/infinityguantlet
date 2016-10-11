@@ -44,6 +44,7 @@ public class ConfigurationHandler {
     public static short maxDepthOfBlockReplacement;
     public static int maxActionsPerTick;
     public static int[] supportedDimensionIDs;
+    public static int seekNewTargetRange;
 
 
     public static void init(File configFile){
@@ -74,7 +75,8 @@ public class ConfigurationHandler {
         isTimeGemGauntletEnabled = configuration.getBoolean("isTimeGemGauntletEnabled", Configuration.CATEGORY_GENERAL, true, "Enables the Time Gem's Gauntlet Only ability");
         isRealityGauntletGemEnabled = configuration.getBoolean("isRealityGemGauntletEnabled", Configuration.CATEGORY_GENERAL, true, "Enables the Reality Gem's Gauntlet Only ability");
         isSpaceGemGauntletEnabled = configuration.getBoolean("isSpaceGemGauntletEnabled", Configuration.CATEGORY_GENERAL, true, "Enables the Space Gem's Gauntlet Only ability");
-        
+
+        seekNewTargetRange = configuration.getInt("seekRangeForNewTarget", Configuration.CATEGORY_GENERAL, 32, 1, 64, "Distance mobs targeting players will look for different target");
         seekRangeForEntities = configuration.getInt("seekRangeForEntities", Configuration.CATEGORY_GENERAL, 64, 0, 128, "The distance the Gauntlet or Gem will try to find an Entity in the player crosshair");
         seekRangeForBlocks = configuration.getInt("seekRangeForBlocks", Configuration.CATEGORY_GENERAL, 64, 0, 128, "The distance the Gauntlet or Gem will try to find Blocks in the player crosshair");
         powerGemDamageAmount = configuration.getInt("powerGemDamageAmount", Configuration.CATEGORY_GENERAL, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, "Amount of Damage that the PowerGem will send to an enemy");
