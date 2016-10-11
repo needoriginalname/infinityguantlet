@@ -119,7 +119,6 @@ public class ItemGauntlet extends ItemIG implements IKeyBound {
             if (state == null) return;
 
             int actualTimeLeft = state.getActualTimeLife(stack) - (this.getMaxItemUseDuration(stack) - count);
-            System.out.println(actualTimeLeft);
 
             if ((actualTimeLeft <= 0)){
                 if (player.ticksExisted % 30 == 0) {
