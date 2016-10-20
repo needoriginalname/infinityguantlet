@@ -1,6 +1,7 @@
 package com.needoriginalname.infinitygauntlet.items;
 
 import com.needoriginalname.infinitygauntlet.reference.Names;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
@@ -19,6 +20,7 @@ public class ItemGauntletReplica extends ItemIG {
         //this.setCreativeTab(CreativeTabs.tabAllSearch);
         this.setUnlocalizedName(Names.InfinityGauntletReplica);
         this.hasSubtypes = false;
+        this.setCreativeTab(CreativeTabs.tabMisc);
     }
 
     public EnumAction getItemUseAction(ItemStack stack)
