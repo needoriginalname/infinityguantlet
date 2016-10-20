@@ -1,5 +1,6 @@
 package com.needoriginalname.infinitygauntlet.items;
 
+import com.needoriginalname.infinitygauntlet.hander.crafting.GauntletRecipe;
 import com.needoriginalname.infinitygauntlet.reference.IDs;
 import com.needoriginalname.infinitygauntlet.reference.Names;
 import com.needoriginalname.infinitygauntlet.util.FuelHandler;
@@ -46,18 +47,7 @@ public class ModItems {
 
         GameRegistry.registerFuelHandler(new FuelHandler());
 
-        GameRegistry.addRecipe(new ItemStack(itemInfinityGauntlet),
-                "ABC",
-                "DSE",
-                "GHG",
-                'A', new ItemStack(itemGem, 1, IDs.Gems.RealityGem.getID()),
-                'B', new ItemStack(itemGem, 1, IDs.Gems.MindGem.getID()),
-                'C', new ItemStack(itemGem, 1, IDs.Gems.SpaceGem.getID()),
-                'D', new ItemStack(itemGem, 1, IDs.Gems.PowerGem.getID()),
-                'E', new ItemStack(itemGem, 1, IDs.Gems.TimeGem.getID()),
-                'H', new ItemStack(itemGem, 1, IDs.Gems.SoulGem.getID()),
-                'S', Items.diamond,
-                'G', Items.gold_ingot);
+        GameRegistry.addRecipe(new GauntletRecipe());
 
 /*
         GameRegistry.addRecipe(new ItemStack(itemInfinityGauntlet), new Object[]{
