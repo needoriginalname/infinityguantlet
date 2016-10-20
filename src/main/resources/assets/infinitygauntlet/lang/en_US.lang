@@ -1,16 +1,19 @@
 item.infinitygauntlet:itemInfinityGauntlet.name=Infinity Gauntlet
+item.infinitygauntlet:itemInfinityGauntletReplica.name=Infinity Gauntlet
 item.infinitygauntlet:itemInfinityGem.power.name=Power Gem
 item.infinitygauntlet:itemInfinityGem.space.name=Space Gem
 item.infinitygauntlet:itemInfinityGem.time.name=Time Gem
 item.infinitygauntlet:itemInfinityGem.mind.name=Mind Gem
 item.infinitygauntlet:itemInfinityGem.soul.name=Soul Gem
+item.infinitygauntlet:itemInfinityGem.reality.name=Reality Gem
+item.infinitygauntlet:itemInfinityGemReplica.reality.name=Reality Gem
 item.infinitygauntlet:itemInfinityGemReplica.power.name=Power Gem
 item.infinitygauntlet:itemInfinityGemReplica.space.name=Space Gem
 item.infinitygauntlet:itemInfinityGemReplica.time.name=Time Gem
 item.infinitygauntlet:itemInfinityGemReplica.mind.name=Mind Gem
 item.infinitygauntlet:itemInfinityGemReplica.soul.name=Soul Gem
 
-item.infinitygauntlet:itemInfinityGem.reality.name=Reality Gem
+
 
 
 tile.infinitygauntlet:blockSoulGemTrap.name=Soul Gem Trap
