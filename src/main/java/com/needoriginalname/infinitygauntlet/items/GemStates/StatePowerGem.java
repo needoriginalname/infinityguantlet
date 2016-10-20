@@ -1,9 +1,12 @@
 package com.needoriginalname.infinitygauntlet.items.GemStates;
 
+import com.google.common.base.Predicate;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.network.MessageVectorParticle;
 import com.needoriginalname.infinitygauntlet.network.PacketHandler;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
+import com.needoriginalname.infinitygauntlet.util.MiscUtil;
+import com.needoriginalname.infinitygauntlet.util.nodes.SmiteNode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,7 +25,12 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Queue;
+import java.util.Random;
+
+import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
 
 /**
  * Created by Al on 5/16/2015.
@@ -40,40 +48,42 @@ public class StatePowerGem extends AbstractGemState {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, final EntityPlayer playerIn, int timeLeft) {
         if (playerIn != null && stack != null){
 
 
-            List entities = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().expand(ConfigurationHandler.seekRangeForEntities,ConfigurationHandler.seekRangeForEntities,ConfigurationHandler.seekRangeForEntities));
-            for (Object o: entities){
-                if (o instanceof EntityLivingBase){
-                    EntityLivingBase entity = (EntityLivingBase) o;
-                    boolean okToKill = false;
-                    // Check if tamed horse
-                    boolean isTamedHorse = entity instanceof EntityHorse && ((EntityHorse) entity).isTame();
-                    // check if entities owner
-                    boolean isMyTamedEntity = (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner()== playerIn);
-                    //check for team mate's tamable.
-                    boolean isTeamMatesEntity = (entity instanceof EntityTameable &&
-                            (playerIn.getTeam() != null && ((EntityTameable) entity).getOwner() != null && playerIn.getTeam().isSameTeam(((EntityTameable) entity).getOwner().getTeam())) );
+            Predicate<EntityLivingBase> IS_ENTITY_IN_RANGE = new Predicate<EntityLivingBase>() {
+                @Override
+                public boolean apply(@Nullable EntityLivingBase input) {
+                    float distence = playerIn.getDistanceToEntity(input);
+                    if (input != playerIn && distence <= ConfigurationHandler.seekRangeForEntities){
+                        EntityLivingBase entity = input;
+                        boolean okToSmite = false;
+                        // Check if tamed horse
+                        boolean isTamedHorse = entity instanceof EntityHorse && ((EntityHorse) entity).isTame();
+                        // check if entities owner
+                        boolean isMyTamedEntity = (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner()== playerIn);
+                        //check for team mate's tamable.
+                        boolean isTeamMatesEntity = (entity instanceof EntityTameable &&
+                                (playerIn.getTeam() != null && ((EntityTameable) entity).getOwner() != null && playerIn.getTeam().isSameTeam(((EntityTameable) entity).getOwner().getTeam())) );
 
-                    //check for team mate
-                    boolean isTeammate = (playerIn.getTeam()!= null && entity.getTeam() != null && playerIn.getTeam().isSameTeam(entity.getTeam()));
+                        //check for team mate
+                        boolean isTeammate = (playerIn.getTeam()!= null && entity.getTeam() != null && playerIn.getTeam().isSameTeam(entity.getTeam()));
 
-                    okToKill = !(isTamedHorse || isMyTamedEntity || isTeamMatesEntity || isTeammate);
-
-                    if (okToKill) {
-                        //worldIn.spawnEntityInWorld(new EntityLightningBolt(worldIn, entity.posX, entity.posY, entity.posZ));
-                        this.DamageEntity(entity, playerIn);
-                        worldIn.addWeatherEffect(new EntityLightningBolt(worldIn, entity.posX, entity.posY, entity.posZ));
-
-                        if (playerIn instanceof EntityPlayerMP){
-                          //  ((EntityPlayerMP) playerIn).playerNetServerHandler.sendPacket(new
-                        }
-
+                        okToSmite = !(isTamedHorse || isMyTamedEntity || isTeamMatesEntity || isTeammate);
+                        return okToSmite;
+                    } else {
+                        return false;
                     }
+
                 }
-            }
+            };
+
+            List<EntityLivingBase> list = worldIn.getEntities(EntityLivingBase.class, IS_ENTITY_IN_RANGE);
+            proxy.addDeferredAction(new SmiteNode(worldIn, playerIn.getPosition(), worldIn.getTotalWorldTime() + 1, new Random().nextInt(), playerIn, list ));
+
+
+
         }
     }
 
@@ -94,7 +104,7 @@ public class StatePowerGem extends AbstractGemState {
                     }
                     worldIn.playSoundEffect(playerIn.posX, playerIn.posY, playerIn.posZ, "mob.ghast.fireball", 1.0f, 1.0f);
 
-                    DamageEntity(e, playerIn);
+                    MiscUtil.DamageEntity(e, playerIn);
 
                 } else {
                     MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(worldIn, playerIn, false);
@@ -119,23 +129,5 @@ public class StatePowerGem extends AbstractGemState {
         return super.onItemRightClick(itemStackIn, worldIn, playerIn);
     }
 
-    private void DamageEntity(EntityLivingBase e, EntityPlayer playerIn) {
-        if (e instanceof EntityPlayer) {
-            e.attackEntityFrom(new EntityDamageSourceIndirect("powergem", e, playerIn).setMagicDamage().setDamageBypassesArmor().setDamageAllowedInCreativeMode(), ConfigurationHandler.powerGemDamageAmount);
 
-        } else if (e instanceof  IEntityMultiPart) {
-         Entity part = e.getParts()[0];
-         if (part != null) {
-             part.attackEntityFrom(new EntityDamageSourceIndirect("powergem", e, playerIn).setMagicDamage().setDamageBypassesArmor().setDamageAllowedInCreativeMode(), ConfigurationHandler.powerGemDamageAmount);
-         } else {
-             LogHelper.error("Error, unable to find part from IEntityMultiPart on Entity: " + e.toString() + "with ID" + e.getEntityId());
-         }
-         } else {
-            e.attackEntityFrom(new EntityDamageSourceIndirect("powergem", e, playerIn).setMagicDamage().setDamageBypassesArmor().setDamageAllowedInCreativeMode(), ConfigurationHandler.powerGemDamageAmount);
-        }
-
-
-
-
-    }
 }
