@@ -13,6 +13,8 @@ public class Names {
     public static String PowerGem = "power";
     public static String InfinityGauntlet = "itemInfinityGauntlet";
     public static String SoulGemTrap = "blockSoulGemTrap";
+    public static String InfinityGemReplica = "itemInfinityGemReplica";
+    public static String InfinityGauntletReplica = "itemInfinityGauntletReplica";
 
     public static class Keys {
         public static String ChangeGemState = "keys.infinitygauntlet.changeGemState";

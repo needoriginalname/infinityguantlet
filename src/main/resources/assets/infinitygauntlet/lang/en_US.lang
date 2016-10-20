@@ -4,7 +4,14 @@ item.infinitygauntlet:itemInfinityGem.space.name=Space Gem
 item.infinitygauntlet:itemInfinityGem.time.name=Time Gem
 item.infinitygauntlet:itemInfinityGem.mind.name=Mind Gem
 item.infinitygauntlet:itemInfinityGem.soul.name=Soul Gem
+item.infinitygauntlet:itemInfinityGemReplica.power.name=Power Gem
+item.infinitygauntlet:itemInfinityGemReplica.space.name=Space Gem
+item.infinitygauntlet:itemInfinityGemReplica.time.name=Time Gem
+item.infinitygauntlet:itemInfinityGemReplica.mind.name=Mind Gem
+item.infinitygauntlet:itemInfinityGemReplica.soul.name=Soul Gem
+
 item.infinitygauntlet:itemInfinityGem.reality.name=Reality Gem
+
 
 tile.infinitygauntlet:blockSoulGemTrap.name=Soul Gem Trap
 
@@ -24,3 +31,4 @@ message.currentmode.reality=Current Mode: Reality Gem
 message.currentmode.space=Current Mode: Space Gem
 message.releasedofflineplayer=Player stored is offline, player data adjusted to spawn at that location when he or she logs in
 
+message.replica=Replica

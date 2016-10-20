@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -20,17 +19,22 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Al on 5/16/2015.
  */
 public class ModItems {
     public static final Item itemGem = new ItemGem();
     public static final Item itemInfinityGauntlet = new ItemGauntlet();
+    public static final Item itemGemReplica = new ItemGemReplica();
+
 
     public static void preInit(FMLPreInitializationEvent event){
         GameRegistry.registerItem(itemGem, Names.InfinityGem);
         GameRegistry.registerItem(itemInfinityGauntlet, Names.InfinityGauntlet);
-
+        GameRegistry.registerItem(itemGemReplica, Names.InfinityGemReplica);
 
         //LanguageRegistry.instance().addStringLocalization("death.attack.powergem", "$s was obliterated");
         //LanguageRegistry.instance().addStringLocalization("death.attack.powergem.player", "%l$s was obliterated by %2$s");
@@ -49,21 +53,6 @@ public class ModItems {
 
         GameRegistry.addRecipe(new GauntletRecipe());
 
-/*
-        GameRegistry.addRecipe(new ItemStack(itemInfinityGauntlet), new Object[]{
-                "ABC",
-                "DSE",
-                "GHG",
-                'A', new ItemStack(itemGem, 1, IDs.Gems.RealityGem.getID()),
-                'B', new ItemStack(itemGem, 1, IDs.Gems.MindGem.getID()),
-                'C', new ItemStack(itemGem, 1, IDs.Gems.SpaceGem.getID()),
-                'D', new ItemStack(itemGem, 1, IDs.Gems.PowerGem.getID()),
-                'E', new ItemStack(itemGem, 1, IDs.Gems.TimeGem.getID()),
-                'H', new ItemStack(itemGem, 1, IDs.Gems.SoulGem.getID()),
-                'S', Items.diamond,
-                'G', Items.gold_ingot});
-
-*/
     }
     private static void registerRenderForAllItems(FMLInitializationEvent event) {
         RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
@@ -76,8 +65,17 @@ public class ModItems {
                 new ResourceLocation("infinitygauntlet:itemInfinityGemMind"),
                 new ResourceLocation( "infinitygauntlet:itemInfinityGemSpace"),
                 new ResourceLocation("infinitygauntlet:itemInfinityGemTime") );
+        ModelBakery.registerItemVariants(itemGemReplica,
+                new ResourceLocation("infinitygauntlet:itemInfinityGemPower"),
+                new ResourceLocation("infinitygauntlet:itemInfinityGemSoul"),
+                new ResourceLocation("infinitygauntlet:itemInfinityGemReality"),
+                new ResourceLocation("infinitygauntlet:itemInfinityGemMind"),
+                new ResourceLocation( "infinitygauntlet:itemInfinityGemSpace"),
+                new ResourceLocation("infinitygauntlet:itemInfinityGemTime") );
+
         for (int i = 0; i < IDs.Gems.values().length; i++){
             registerRender(renderItem, itemGem, i);
+            registerRender(renderItem, itemGemReplica, i);
         }
 
 
