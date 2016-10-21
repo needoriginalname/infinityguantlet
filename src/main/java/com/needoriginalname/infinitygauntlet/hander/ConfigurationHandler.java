@@ -45,6 +45,7 @@ public class ConfigurationHandler {
     public static int maxActionsPerTick;
     public static int[] supportedDimensionIDs;
     public static int seekNewTargetRange;
+    public static double chanceForPatreonRewardSpawning;
 
 
     public static void init(File configFile){
@@ -85,7 +86,9 @@ public class ConfigurationHandler {
         powerGemBurnTime = configuration.getInt("powerGemBurnTime", Configuration.CATEGORY_GENERAL, 1600, 0, 72000, "The Burn time the Power Gem will have in a furnace, does not use up item.");
         infinityGauntletBurnTime = configuration.getInt("infinityGauntletBurnTime", Configuration.CATEGORY_GENERAL, 1600, 0, 72000, "The Burn time the Infinity Gauntlet will have in a furnace, does not use up item");
         infinityGauntletMineSpeed = configuration.getInt("infinityGauntletMineSpeed", Configuration.CATEGORY_GENERAL, 100, 0, Integer.MAX_VALUE, "Amount of damage the Infinity Gauntlet will give when used to mine a block");
-         allowGauntletToChangeEntityAgeable = configuration.getBoolean("allowGauntletToChangeEntityAgeable", Configuration.CATEGORY_GENERAL, true, "Allow Gauntlet to change Age of Entity Ageable");
+        allowGauntletToChangeEntityAgeable = configuration.getBoolean("allowGauntletToChangeEntityAgeable", Configuration.CATEGORY_GENERAL, true, "Allow Gauntlet to change Age of Entity Ageable");
+        chanceForPatreonRewardSpawning = configuration.getFloat("chanceForPatreonRewardSpawning", Configuration.CATEGORY_GENERAL, 0.05f, 0, 1, "The percent chance for Zombies to spawn with Contrib / Patreon Rewards");
+
 
         maxDepthOfBlockReplacement = (short) configuration.getInt("maxDepthOfBlockReplacement", Configuration.CATEGORY_GENERAL, 32, 1, 50, "Max depth of Block replacement algorithm for the Reality Gem");
         maxActionsPerTick = configuration.getInt("maxActionsPerTick", Configuration.CATEGORY_GENERAL, 15, 1, 50, "Limits the number of actions per tick per player action");
