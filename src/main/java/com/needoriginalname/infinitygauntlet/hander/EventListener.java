@@ -4,7 +4,6 @@ import com.needoriginalname.infinitygauntlet.items.GemStates.StateMindGem;
 import com.needoriginalname.infinitygauntlet.items.ItemGauntlet;
 import com.needoriginalname.infinitygauntlet.items.ItemGem;
 import com.needoriginalname.infinitygauntlet.items.ModItems;
-import com.needoriginalname.infinitygauntlet.util.LogHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,12 +14,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
@@ -30,8 +31,15 @@ import java.util.Random;
  */
 public class EventListener {
 
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onPlayerTick(TickEvent.PlayerTickEvent event){
+        ParticleHandler.attachParticuleToPlayer(event.player);
+    }
+
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public void onLivingSetAttackTarget(LivingSetAttackTargetEvent event) {
         if (event.entity.worldObj.isRemote) return;
         if (!(event.entity instanceof EntityPlayer)) {

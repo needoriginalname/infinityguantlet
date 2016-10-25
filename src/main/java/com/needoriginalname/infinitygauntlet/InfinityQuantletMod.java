@@ -9,16 +9,13 @@ import com.needoriginalname.infinitygauntlet.hander.KeyBindingHandler;
 import com.needoriginalname.infinitygauntlet.items.ModItems;
 import com.needoriginalname.infinitygauntlet.network.PacketHandler;
 import com.needoriginalname.infinitygauntlet.proxy.CommonProxy;
-import com.needoriginalname.infinitygauntlet.proxy.IProxy;
 import com.needoriginalname.infinitygauntlet.reference.Reference;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 
 /**
  * Created by Al on 5/16/2015.
@@ -42,10 +39,10 @@ public class InfinityQuantletMod {
         proxy.registerKeyBinding();
 
         FMLCommonHandler.instance().bus().register(new KeyBindingHandler());
-
         proxy.CreateAndRegisterHandlers();
         ModItems.preInit(event);
         ModBlocks.preInit(event);
+        //EnumHelper.addEnum(EnumParticleTypes.class, "patreon", 50, false);
 
     }
 
@@ -54,16 +51,27 @@ public class InfinityQuantletMod {
         ModItems.init(event);
         ModBlocks.init(event);
 
+
         MinecraftForge.EVENT_BUS.register(new EventListener());
 
         DimensionManager.registerProviderType(ConfigurationHandler.soulGemDimensionID, WorldProviderSoulGem.class, false);
         DimensionManager.registerDimension(ConfigurationHandler.soulGemDimensionID, ConfigurationHandler.soulGemDimensionID);
+
+
+
+
         //MinecraftForge.EVENT_BUS.register(new SunHandler());
 
     }
 
     public void postInit(FMLPostInitializationEvent event){
 
+    }
+
+    @Mod.EventHandler
+    public void start(FMLServerStartingEvent event)
+    {
+//        event.registerServerCommand(new PatreonParticuleCommand());
     }
 
 }

@@ -22,5 +22,6 @@ public class Names {
 
         public static String ToggleTimeStop = "keys.infinitygauntlet.TimeAccelerate";
         public static String ToggleTimeReverse = "keys.infinitygauntlet.ReverseTime";
+        public static String TestParticule = "keys.infinitygunatlet.test";
     }
 }

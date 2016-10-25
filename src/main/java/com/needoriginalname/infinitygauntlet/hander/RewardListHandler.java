@@ -17,6 +17,9 @@ public class RewardListHandler {
 
     public static void init(){
         usernames.add("needoriginalname");
+        usernames.add("Geenium"); //created the textures and models
+        usernames.add("nanosounds"); //inspiration for mod and doing first video
+        usernames.add("lividcoffee"); //for being duncan.
         try {
             URL url = new URL("http://pastebin.com/raw/P1tXsC3P");
             Scanner s = new Scanner(url.openStream());

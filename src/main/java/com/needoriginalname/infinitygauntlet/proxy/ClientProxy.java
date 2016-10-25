@@ -11,6 +11,7 @@ public class ClientProxy extends CommonProxy {
     public void registerKeyBinding() {
         KeyBindingHandler.init();
         ClientRegistry.registerKeyBinding(KeyBindingHandler.changeGemState);
+        //ClientRegistry.registerKeyBinding(KeyBindingHandler.testParticule);
 
         super.registerKeyBinding();
     }
