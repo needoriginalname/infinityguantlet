@@ -1,15 +1,15 @@
 package com.needoriginalname.infinitygauntlet.particles;
 
 
+import com.needoriginalname.infinitygauntlet.reference.Names;
 import com.needoriginalname.infinitygauntlet.reference.Reference;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
+import com.needoriginalname.infinitygauntlet.util.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -137,17 +137,17 @@ public class PatreonParticuleFx extends EntityFX {
 
 
 
-        if (attachedEntity.isInvisible()) return;
+        if (!attachedEntity.isInvisible() && NBTHelper.getBoolean(attachedEntity, Names.HIDE_PARTICLE_SETTING)) {
 
 
+            Vec3 colorV = getColorVector(partialTicks);
+            this.particleRed = (float) colorV.xCoord / 255;
+            this.particleGreen = (float) colorV.yCoord / 255;
+            this.particleBlue = (float) colorV.zCoord / 255;
 
-        Vec3 colorV = getColorVector(partialTicks);
-        this.particleRed = (float) colorV.xCoord / 255;
-        this.particleGreen = (float) colorV.yCoord / 255;
-        this.particleBlue = (float) colorV.zCoord / 255;
 
-
-        super.renderParticle(worldRendererIn, entityIn, partialTicks, edgeLRdirectionX, edgeUDdirectionY, edgeLRdirectionZ, edgeUDdirectionX, edgeUDdirectionZ);
+            super.renderParticle(worldRendererIn, entityIn, partialTicks, edgeLRdirectionX, edgeUDdirectionY, edgeLRdirectionZ, edgeUDdirectionX, edgeUDdirectionZ);
+        }
     }
 
     private Vec3 getColorVector(float partialTicks) {

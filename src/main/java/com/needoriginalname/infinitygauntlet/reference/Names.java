@@ -16,6 +16,8 @@ public class Names {
     public static String InfinityGemReplica = "itemInfinityGemReplica";
     public static String InfinityGauntletReplica = "itemInfinityGauntletReplica";
     public static String Patreon = "patreon";
+    public static String HIDE_PARTICLE_SETTING = "particleSetting";
+
     public static class Keys {
         public static String ChangeGemState = "keys.infinitygauntlet.changeGemState";
         public static String Category = "keys.infinitygauntlet.category";

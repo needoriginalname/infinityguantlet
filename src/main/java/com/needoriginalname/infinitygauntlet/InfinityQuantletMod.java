@@ -2,6 +2,7 @@ package com.needoriginalname.infinitygauntlet;
 
 
 import com.needoriginalname.infinitygauntlet.blocks.ModBlocks;
+import com.needoriginalname.infinitygauntlet.command.ToggleParticleCommand;
 import com.needoriginalname.infinitygauntlet.dimension.WorldProviderSoulGem;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.hander.EventListener;
@@ -71,7 +72,7 @@ public class InfinityQuantletMod {
     @Mod.EventHandler
     public void start(FMLServerStartingEvent event)
     {
-//        event.registerServerCommand(new PatreonParticuleCommand());
+        event.registerServerCommand(new ToggleParticleCommand());
     }
 
 }
