@@ -1,11 +1,16 @@
 package com.needoriginalname.infinitygauntlet.particles;
 
 
+import com.needoriginalname.infinitygauntlet.reference.Reference;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -27,6 +32,8 @@ public class PatreonParticuleFx extends EntityFX {
     }
 
     Entity attachedEntity;
+
+    private final ResourceLocation particuleLoc = new ResourceLocation(Reference.MODID+ ":particles/tinygem");
 
 
 
@@ -53,14 +60,19 @@ public class PatreonParticuleFx extends EntityFX {
 
 
 
-        Vec3 v = this.getParticuleVec(e);
+        Vec3 v = this.getParticuleVec();
         this.posX = v.xCoord;
         this.posY = v.yCoord;
         this.posZ = v.zCoord;
 
 
+        this.particleAlpha = 0.75f;
         this.startingPoint = new Random().nextInt(1200);
-        this.setParticleTextureIndex(48);
+
+        TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(particuleLoc.toString());
+        setParticleIcon(sprite);
+
+
 
     }
 
@@ -77,14 +89,16 @@ public class PatreonParticuleFx extends EntityFX {
         this.startingX = xCoordIn;
         this.startingY = yCoordIn;
         this.startingZ = zCoordIn;
-
+        this.noClip = true;
         this.motionX = 0;
         this.motionY = 0;
         this.motionZ = 0;
         this.startingPoint = new Random().nextInt(1200);
+        this.particleAlpha = 0.75f;
+        TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(particuleLoc.toString());
+        setParticleIcon(sprite);
 
 
-        this.setParticleTextureIndex(48);
     }
 
 
@@ -97,25 +111,49 @@ public class PatreonParticuleFx extends EntityFX {
         }
     }
 
-
     @Override
-    public void renderParticle(WorldRenderer worldRendererIn, Entity entityIn, float partialTicks, float x, float y, float z, float yaw, float pitch) {
+    public int getFXLayer() {
+        return 1;
+    }
+
+    /**
+     * Called to update the entity's position/logic.
+     */
+    @Override
+    public void onUpdate() {
         //not sure if the last 2 are actually yaw and pitch
-        Vec3 newV = getParticuleVec(entityIn, partialTicks);
+        super.onUpdate();
+        Vec3 newV = getParticuleVec();
         this.posX = newV.xCoord;
         this.posY = newV.yCoord;
         this.posZ = newV.zCoord;
 
-        Vec3 colorV = getColorVector(entityIn, partialTicks);
+
+
+
+    }
+
+    @Override
+    public void renderParticle(WorldRenderer worldRendererIn, Entity entityIn, float partialTicks, float edgeLRdirectionX, float edgeUDdirectionY, float edgeLRdirectionZ,
+                               float edgeUDdirectionX, float edgeUDdirectionZ) {
+
+
+
+        if (attachedEntity.isInvisible()) return;
+
+
+
+        Vec3 colorV = getColorVector(partialTicks);
         this.particleRed = (float) colorV.xCoord / 255;
         this.particleGreen = (float) colorV.yCoord / 255;
         this.particleBlue = (float) colorV.zCoord / 255;
 
-        super.renderParticle(worldRendererIn, entityIn, partialTicks, x,y,z,yaw,pitch);
+
+        super.renderParticle(worldRendererIn, entityIn, partialTicks, edgeLRdirectionX, edgeUDdirectionY, edgeLRdirectionZ, edgeUDdirectionX, edgeUDdirectionZ);
     }
 
-    private Vec3 getColorVector(Entity entityIn, float partialTicks) {
-        int step = (entityIn.ticksExisted + startingPoint) % 1200;
+    private Vec3 getColorVector(float partialTicks) {
+        int step = (attachedEntity.ticksExisted + startingPoint) % 1200;
         Vec3 v;
         //power gem color
         if (step <= 150){
@@ -181,14 +219,10 @@ public class PatreonParticuleFx extends EntityFX {
 
     }
 
-    private Vec3 getParticuleVec(Entity entityIn) {
-        return getParticuleVec(entityIn, 0);
-    }
-
-
-    private Vec3 getParticuleVec(Entity entityIn, float partialTicks) {
+    private Vec3 getParticuleVec() {
         int ticksPerCycle = getNumberOfTicksPerCycle();
-        float percentAround = (entityIn.ticksExisted % ticksPerCycle); // + (partialTicks * (entityIn.ticksExisted % ticksPerCycle)   / ticksPerCycle);
+
+        float percentAround = (attachedEntity.ticksExisted % ticksPerCycle); // + (partialTicks * (entityIn.ticksExisted % ticksPerCycle)   / ticksPerCycle);
         //percentAround += partialTicks;
         percentAround /= ticksPerCycle;
         Vec3 newV = baseV.rotateYaw((float) (percentAround * ( 2* Math.PI)));

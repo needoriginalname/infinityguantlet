@@ -4,6 +4,7 @@ import com.needoriginalname.infinitygauntlet.items.GemStates.StateMindGem;
 import com.needoriginalname.infinitygauntlet.items.ItemGauntlet;
 import com.needoriginalname.infinitygauntlet.items.ItemGem;
 import com.needoriginalname.infinitygauntlet.items.ModItems;
+import com.needoriginalname.infinitygauntlet.reference.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,6 +16,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -38,8 +41,16 @@ public class EventListener {
     }
 
 
+
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
+    public void stitcherEventPre(TextureStitchEvent.Pre event){
+        ResourceLocation rl = new ResourceLocation(Reference.MODID+ ":particles/tinygem");
+        event.map.registerSprite(rl);
+    }
+
+
+    @SubscribeEvent
     public void onLivingSetAttackTarget(LivingSetAttackTargetEvent event) {
         if (event.entity.worldObj.isRemote) return;
         if (!(event.entity instanceof EntityPlayer)) {
