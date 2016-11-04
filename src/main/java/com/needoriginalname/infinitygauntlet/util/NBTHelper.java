@@ -1,6 +1,7 @@
 package com.needoriginalname.infinitygauntlet.util;
 
 import com.needoriginalname.infinitygauntlet.reference.Reference;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -30,6 +31,19 @@ public class NBTHelper
 
         return itemStack.getTagCompound().getCompoundTag(Reference.MODID);
     }
+
+    private static NBTTagCompound getModLevelTags(Entity entity)
+    {
+        if (!entity.getEntityData().hasKey(Reference.MODID)){
+            entity.getEntityData().setTag(Reference.MODID, new NBTTagCompound());
+        }
+
+        return entity.getEntityData().getCompoundTag(Reference.MODID);
+    }
+
+
+
+
 
     public static void setLong(ItemStack itemStack, String keyName, long keyValue)
     {
@@ -68,6 +82,24 @@ public class NBTHelper
     public static void setBoolean(ItemStack itemStack, String keyName, boolean keyValue)
     {
         getModLevelTags(itemStack).setBoolean(keyName, keyValue);
+    }
+
+
+    public static boolean getBoolean(Entity entity, String keyName)
+    {
+
+
+        if (!getModLevelTags(entity).hasKey(keyName))
+        {
+            setBoolean(entity, keyName, false);
+        }
+
+        return getModLevelTags(entity).getBoolean(keyName);
+    }
+
+    public static void setBoolean(Entity entity, String keyName, boolean keyValue)
+    {
+        getModLevelTags(entity).setBoolean(keyName, keyValue);
     }
 
     // byte
