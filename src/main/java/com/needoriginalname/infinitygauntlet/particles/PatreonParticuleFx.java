@@ -66,7 +66,6 @@ public class PatreonParticuleFx extends EntityFX {
         this.posZ = v.zCoord;
 
 
-        this.particleAlpha = 0.75f;
         this.startingPoint = new Random().nextInt(1200);
 
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(particuleLoc.toString());
@@ -94,7 +93,6 @@ public class PatreonParticuleFx extends EntityFX {
         this.motionY = 0;
         this.motionZ = 0;
         this.startingPoint = new Random().nextInt(1200);
-        this.particleAlpha = 0.75f;
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(particuleLoc.toString());
         setParticleIcon(sprite);
 
