@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.event.*;
  */
 
 
-@Mod(modid = Reference.MODID, version = Reference.VERSION, name = Reference.MODNAME)
+@Mod(modid = Reference.MODID, version = Reference.VERSION, name = Reference.MODNAME, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class InfinityQuantletMod {
 
     @Mod.Instance(Reference.MODID)

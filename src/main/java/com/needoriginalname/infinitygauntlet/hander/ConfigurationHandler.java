@@ -11,7 +11,7 @@ import java.io.File;
  * Created by Al on 5/18/2015.
  */
 public class ConfigurationHandler {
-    private static Configuration configuration;
+    public static Configuration configuration;
     public static boolean isPowerGemEnabled;
     public static boolean isMindGemEnabled;
     public static boolean isSoulGemEnabled;
