@@ -240,7 +240,7 @@ public class StateSoulGem extends AbstractGemState{
     }
 
     private ItemStack ReleaseMob(ItemStack itemStackIn, World worldIn, BlockPos pos, EntityPlayer playerIn) {
-        if (canReleaseMob(worldIn, pos)){
+        if (canReleaseMob(worldIn, pos, itemStackIn)){
             NBTTagCompound mobNBT = this.getMobFromNBT(itemStackIn.getTagCompound());
             mobNBT = this.AdjustPositionInNBT(mobNBT, pos);
             Entity entity = EntityList.createEntityFromNBT(mobNBT, worldIn);
@@ -296,9 +296,10 @@ public class StateSoulGem extends AbstractGemState{
 
     }
 
-    private boolean canReleaseMob(World worldIn, BlockPos pos) {
+    private boolean canReleaseMob(World worldIn, BlockPos pos, ItemStack stack ) {
         if (pos != null && worldIn.isBlockLoaded(pos)){
-            return true;
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(CAPTUREDMOBS) && stack.getTagCompound().getTagList(CAPTUREDMOBS, Constants.NBT.TAG_COMPOUND).tagCount() > 0)
+                return true;
         }
 
         return false;
