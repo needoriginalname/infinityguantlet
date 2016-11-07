@@ -1,9 +1,12 @@
 package com.needoriginalname.infinitygauntlet.hander;
 
 import com.needoriginalname.infinitygauntlet.reference.Reference;
+import com.needoriginalname.infinitygauntlet.util.LogHelper;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import sun.rmi.runtime.Log;
 
 import java.io.File;
 
@@ -46,13 +49,17 @@ public class ConfigurationHandler {
     public static int[] supportedDimensionIDs;
     public static int seekNewTargetRange;
     public static double chanceForPatreonRewardSpawning;
+    public static boolean forcePatreonListToReload;
 
 
     public static void init(File configFile){
         if (configuration == null){
             configuration = new Configuration(configFile);
             loadConfiguration();
+            MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
         }
+
+
     }
 
     private static void loadConfiguration() {
@@ -97,7 +104,6 @@ public class ConfigurationHandler {
         soulGemBiomeID = configuration.getInt("soulGemBiomeID", Configuration.CATEGORY_GENERAL, 50, 50, Short.MAX_VALUE, "Biome ID for Soul Gem Biome");
 
 
-
         String[] defaultDim = new String[3];
         defaultDim[0] = "0"; defaultDim[1] = "-1"; defaultDim[2] = "1";
 
@@ -107,6 +113,16 @@ public class ConfigurationHandler {
 
         for (int i = 0; i < supportedDimensionIDs.length ; i++){
             supportedDimensionIDs[i] = Integer.parseInt(supportedDimensionIDsString[i]);
+        }
+        forcePatreonListToReload = configuration.getBoolean("forcePatreonListReload", Configuration.CATEGORY_GENERAL, false, "When Toggled to True, force Patreon List to reload. Toggled to False, does nothing.");
+
+        if (forcePatreonListToReload){
+            if(RewardListHandler.loadList()){
+                LogHelper.info("Patreon list reloaded");
+            } else {
+                LogHelper.error("Failed to reload Patreon list");
+            }
+
         }
 
 
@@ -122,6 +138,7 @@ public class ConfigurationHandler {
     @SubscribeEvent
     public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
     {
+
         if (event.modID.equalsIgnoreCase(Reference.MODID))
         {
             loadConfiguration();

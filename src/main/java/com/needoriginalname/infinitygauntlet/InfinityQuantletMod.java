@@ -2,6 +2,7 @@ package com.needoriginalname.infinitygauntlet;
 
 
 import com.needoriginalname.infinitygauntlet.blocks.ModBlocks;
+import com.needoriginalname.infinitygauntlet.command.ForcePatreonReloadCommand;
 import com.needoriginalname.infinitygauntlet.command.ToggleParticleCommand;
 import com.needoriginalname.infinitygauntlet.dimension.WorldProviderSoulGem;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
@@ -55,6 +56,7 @@ public class InfinityQuantletMod {
 
         MinecraftForge.EVENT_BUS.register(new EventListener());
 
+
         DimensionManager.registerProviderType(ConfigurationHandler.soulGemDimensionID, WorldProviderSoulGem.class, false);
         DimensionManager.registerDimension(ConfigurationHandler.soulGemDimensionID, ConfigurationHandler.soulGemDimensionID);
 
@@ -73,6 +75,7 @@ public class InfinityQuantletMod {
     public void start(FMLServerStartingEvent event)
     {
         event.registerServerCommand(new ToggleParticleCommand());
+        event.registerServerCommand(new ForcePatreonReloadCommand());
     }
 
 }

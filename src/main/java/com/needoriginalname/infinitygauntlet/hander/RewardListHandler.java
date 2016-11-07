@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class RewardListHandler {
     static List<String> usernames = new ArrayList<String>();
 
-    public static void init(){
+    public static boolean loadList(){
         usernames.add("needoriginalname");
         usernames.add("Geenium"); //created the textures and models
         usernames.add("nanosounds"); //inspiration for mod and doing first video
@@ -28,14 +28,16 @@ public class RewardListHandler {
                 if (!usernames.contains(nextUsername)) {
                     usernames.add(nextUsername);
                 }
+                return true;
             }
         } catch (IOException e) {
             LogHelper.warn("Unable to load Donor List, defaulting to built in Contribution list.");
         }
+        return false;
     }
 
     public static List<String> getRewardUsernames(){
-        if (usernames.size() == 0) init();
+        if (usernames.size() == 0) loadList();
 
         return usernames;
     }
@@ -45,6 +47,4 @@ public class RewardListHandler {
         int index = new Random().nextInt(list.size());
         return list.get(index);
     }
-
-
 }

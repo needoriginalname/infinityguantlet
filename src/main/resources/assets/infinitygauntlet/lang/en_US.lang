@@ -34,4 +34,7 @@ message.currentmode.reality=Current Mode: Reality Gem
 message.currentmode.space=Current Mode: Space Gem
 message.releasedofflineplayer=Player stored is offline, player data adjusted to spawn at that location when he or she logs in
 
+command.reloadlist.succeed=Patreon Reward List reload, successfully
+command.reloadlist.failed=Patreon Reward List reload failed
+
 message.replica=Replica
