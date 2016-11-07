@@ -11,6 +11,7 @@ import com.needoriginalname.infinitygauntlet.util.IKeyBound;
 import com.needoriginalname.infinitygauntlet.util.MiscUtil;
 import com.needoriginalname.infinitygauntlet.util.NBTHelper;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -34,6 +35,10 @@ import java.util.List;
  * Created by Al on 5/18/2015.
  */
 public class ItemGauntlet extends ItemIG implements IKeyBound {
+
+    //this varable should only be changed in client-side operations
+    private int durationCount;
+
     ItemGauntlet(){
         this.setMaxStackSize(1);
         //this.setCreativeTab(CreativeTabs.tabAllSearch);
@@ -121,15 +126,58 @@ public class ItemGauntlet extends ItemIG implements IKeyBound {
 
             int actualTimeLeft = state.getActualTimeLife(stack) - (this.getMaxItemUseDuration(stack) - count);
 
-            if ((actualTimeLeft <= 0)){
+            if ((actualTimeLeft <= 0 && state.isGauntletTypeEnabled())){
                 if (player.ticksExisted % 30 == 0) {
                     PacketHandler.dispatcher.sendTo(new MessageCustomSoundPacket("random.successful_hit", (int) player.posX, (int) player.posY, (int) player.posZ), player);
                 }
             }
 
+        } else {
+            this.durationCount = (this.getMaxItemUseDuration(stack) - count);
         }
 
         super.onUsingTick(stack, playerIn, count);
+    }
+
+    /**
+     * Determines if the durability bar should be rendered for this item.
+     * Defaults to vanilla stack.isDamaged behavior.
+     * But modders can use this for any data they wish.
+     *
+     * @param stack The current Item Stack
+     * @return True if it should render the 'durability' bar.
+     */
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        AbstractGemState state = this.getCurrentGemMode(stack).getGemState();
+
+
+        if (Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem() == stack
+                && Minecraft.getMinecraft().thePlayer.getItemInUse() == stack &&
+                state.isGauntletTypeEnabled() &&
+                this.getPercentOfCharge(stack) > 0.0 &&
+                this.getPercentOfCharge(stack) < 1.0){
+                return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Queries the percentage of the 'Durability' bar that should be drawn.
+     *
+     * @param stack The current ItemStack
+     * @return 1.0 for 100% 0 for 0%
+     */
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return getPercentOfCharge(stack);
+
+    }
+
+    private double getPercentOfCharge(ItemStack stack) {
+        double d = 1.0 - ((double) this.durationCount / this.getCurrentGemMode(stack).getGemState().getActualTimeLife(stack));
+        return d;
     }
 
     /**
