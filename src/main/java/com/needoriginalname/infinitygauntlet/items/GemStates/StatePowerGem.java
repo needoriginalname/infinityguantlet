@@ -39,7 +39,7 @@ public class StatePowerGem extends AbstractGemState {
 
     @Override
     public int getActualTimeLife(ItemStack stack) {
-        return 20*20;
+        return ConfigurationHandler.powerGauntletChargeTime;
     }
 
     @Override

@@ -32,6 +32,10 @@ import java.util.Random;
 public class StateSpaceGem extends AbstractGemState{
 
 
+    @Override
+    public int getActualTimeLife(ItemStack stack) {
+        return ConfigurationHandler.spaceGauntletChargeTime;
+    }
 
     @Override
     public boolean isGauntletTypeEnabled() {

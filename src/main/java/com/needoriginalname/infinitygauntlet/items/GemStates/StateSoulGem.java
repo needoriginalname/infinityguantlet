@@ -35,6 +35,11 @@ public class StateSoulGem extends AbstractGemState{
     private static final String CAPTUREDMOBS = "capturedMobs";
 
     @Override
+    public int getActualTimeLife(ItemStack stack) {
+        return ConfigurationHandler.soulGauntletChargeTime;
+    }
+
+    @Override
     public boolean isGauntletTypeEnabled() {
         return ConfigurationHandler.isSoulGemGauntletEnabled;
     }

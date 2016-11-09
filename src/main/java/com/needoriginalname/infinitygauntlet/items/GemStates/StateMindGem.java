@@ -178,8 +178,12 @@ public class StateMindGem extends AbstractGemState {
             return list.size() > 1;
 
         }
-
-
         return false;
+    }
+
+
+    @Override
+    public int getActualTimeLife(ItemStack stack) {
+        return ConfigurationHandler.mindGauntletChargeTime;
     }
 }

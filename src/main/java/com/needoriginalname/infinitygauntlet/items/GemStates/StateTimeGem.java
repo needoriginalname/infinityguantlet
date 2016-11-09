@@ -28,7 +28,7 @@ public class StateTimeGem extends AbstractGemState{
 
     @Override
     public int getActualTimeLife(ItemStack stack) {
-        return 20*15;
+        return ConfigurationHandler.timeGauntletChargeTime;
     }
 
     @Override

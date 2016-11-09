@@ -41,8 +41,10 @@ import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
  */
 public class StateRealityGem extends AbstractGemState{
 
-
-
+    @Override
+    public int getActualTimeLife(ItemStack stack) {
+        return ConfigurationHandler.realityGauntletChargeTime;
+    }
 
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {

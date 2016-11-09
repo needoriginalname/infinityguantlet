@@ -50,6 +50,12 @@ public class ConfigurationHandler {
     public static int seekNewTargetRange;
     public static double chanceForPatreonRewardSpawning;
     public static boolean forcePatreonListToReload;
+    public static int mindGauntletChargeTime;
+    public static int powerGauntletChargeTime;
+    public static int realityGauntletChargeTime;
+    public static int soulGauntletChargeTime;
+    public static int spaceGauntletChargeTime;
+    public static int timeGauntletChargeTime;
 
 
     public static void init(File configFile){
@@ -103,6 +109,12 @@ public class ConfigurationHandler {
         soulGemDimensionID = configuration.getInt("soulGemDimensionID", Configuration.CATEGORY_GENERAL, -10, Short.MIN_VALUE, Short.MAX_VALUE, "dimension ID for Soul Gem Dimension");
         soulGemBiomeID = configuration.getInt("soulGemBiomeID", Configuration.CATEGORY_GENERAL, 50, 50, Short.MAX_VALUE, "Biome ID for Soul Gem Biome");
 
+        mindGauntletChargeTime = configuration.getInt("mindGauntletChargeTime", Configuration.CATEGORY_GENERAL, 20, 20, 72000, "Number of ticks to charge up the gauntlet's mind gem ability.");
+        spaceGauntletChargeTime = configuration.getInt("spaceGauntletChargeTime", Configuration.CATEGORY_GENERAL, 20, 20, 72000, "Number of ticks to charge up the gauntlet's space gem ability.");
+        powerGauntletChargeTime = configuration.getInt("powerGauntletChargeTime", Configuration.CATEGORY_GENERAL, 200, 20, 72000, "Number of ticks to charge up the gauntlet's power gem ability.");
+        realityGauntletChargeTime = configuration.getInt("realityGauntletChargeTime", Configuration.CATEGORY_GENERAL, 40, 20, 72000, "Number of ticks to charge up the gauntlet's reality gem ability.");
+        timeGauntletChargeTime = configuration.getInt("timeGauntletChargeTime", Configuration.CATEGORY_GENERAL, 40, 20, 72000, "Number of ticks to charge up the gauntlet's time gem ability.");
+        soulGauntletChargeTime = configuration.getInt("soulGauntletChargeTime", Configuration.CATEGORY_GENERAL, 40, 20, 72000, "Number of ticks to charge up the gauntlet's soul gem ability.");
 
         String[] defaultDim = new String[3];
         defaultDim[0] = "0"; defaultDim[1] = "-1"; defaultDim[2] = "1";
