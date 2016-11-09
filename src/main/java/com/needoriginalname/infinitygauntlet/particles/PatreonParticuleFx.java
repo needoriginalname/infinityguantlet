@@ -129,6 +129,9 @@ public class PatreonParticuleFx extends EntityFX {
 
 
 
+
+
+
     }
 
     @Override
@@ -137,7 +140,7 @@ public class PatreonParticuleFx extends EntityFX {
 
 
 
-        if (!attachedEntity.isInvisible() && NBTHelper.getBoolean(attachedEntity, Names.HIDE_PARTICLE_SETTING)) {
+        if (!attachedEntity.isInvisible() && !NBTHelper.getBoolean(attachedEntity, Names.HIDE_PARTICLE_SETTING)) {
 
 
             Vec3 colorV = getColorVector(partialTicks);

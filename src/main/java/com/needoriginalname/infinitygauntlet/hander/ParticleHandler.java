@@ -7,8 +7,6 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,27 +24,49 @@ public class ParticleHandler {
     public static Map<EntityPlayer, PatreonParticuleFx> trackedParticules = new HashMap<EntityPlayer, PatreonParticuleFx>();
     public static Set<EntityPlayer> trackedPlayers = new HashSet<EntityPlayer>();
 
-    public static boolean attachParticuleToPlayer(EntityPlayer player){
-        if (!trackedPlayers.contains(player)){
-            trackedPlayers.add(player);
+    public static boolean handleParticlesOnPlayer(EntityPlayer player){
+        if (!trackedPlayers.contains(player) && w.getEntityByID(player.getEntityId()) != null && player.getDistanceToEntity(mc.thePlayer) < 128){
+            attachParticleOnPlayer(player);
+        } else {
+            if(trackedPlayers.contains(player) && (player.getDistanceToEntity(mc.thePlayer) >= 128 || mc.theWorld.getEntityByID(player.getEntityId()) == null  )){
+                detachParticleOnPlayer(player);
+            }
 
-            if (RewardListHandler.getRewardUsernames().contains(player.getDisplayNameString())){
-                PatreonParticuleFx particule = new PatreonParticuleFx(player.worldObj, player);
-                trackedParticules.put(player,  particule);
-                Minecraft.getMinecraft().effectRenderer.addEffect(particule);
 
-                LogHelper.info("Attaching particule to " + player.getDisplayNameString());
-                return true;
+            //checks to see if particule is dead
+            if(trackedPlayers.contains(player)){
+                if (trackedParticules.containsKey(player)){
+                    //kill particle if sent to new dim
+                    if (trackedParticules.get(player).dimension != mc.thePlayer.dimension){
+                        trackedParticules.get(player).setDead();
+                    }
+
+                    //stop tracking particule if dead
+                    if (trackedParticules.get(player).isDead){
+                        detachParticleOnPlayer(player);
+                    }
+                }
             }
         }
 
         return false;
     }
 
+    private static void attachParticleOnPlayer(EntityPlayer player) {
+        trackedPlayers.add(player);
+
+        if (RewardListHandler.getRewardUsernames().contains(player.getDisplayNameString())){
+            PatreonParticuleFx particule = new PatreonParticuleFx(player.worldObj, player);
+            trackedParticules.put(player,  particule);
+            Minecraft.getMinecraft().effectRenderer.addEffect(particule);
+
+            LogHelper.info("Attaching particule to " + player.getDisplayNameString());
+            //return true;
+        }
+    }
 
 
-
-    public static boolean detachParticuleOnPlayer(EntityPlayer player){
+    public static boolean detachParticleOnPlayer(EntityPlayer player){
         if (trackedPlayers.contains(player)){
             trackedPlayers.remove(player);
             if (trackedParticules.containsKey(player)){

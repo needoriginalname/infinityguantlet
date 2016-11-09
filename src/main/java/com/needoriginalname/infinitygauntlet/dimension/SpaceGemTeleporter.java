@@ -108,11 +108,11 @@ public class SpaceGemTeleporter extends Teleporter {
                         //if block is empty fill it
                         if (q == (int)Math.floor(newY - 2)){
                             boolean r = world.setBlockState(new BlockPos(i, q, k), Blocks.cobblestone.getDefaultState());
-                            System.out.println(r);
+
                             //assert r;
                         }else{
                             boolean r2 = world.setBlockState(new BlockPos(i, q, k), Blocks.air.getDefaultState());
-                            System.out.println(r2);
+                            
 
                             //assert r;
                         }
