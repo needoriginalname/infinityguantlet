@@ -47,7 +47,7 @@ public class SpaceGemTeleporter extends Teleporter {
     @Override
     public boolean makePortal(Entity entity) {
         if (clearPath){
-            BlockPos playerSpawnAt = newPos;
+            BlockPos playerSpawnAt = entity.getPosition();
             if (playerSpawnAt.getY() < 5){
                 playerSpawnAt = new BlockPos(playerSpawnAt.getX(), 5, playerSpawnAt.getZ());
             }
@@ -55,18 +55,18 @@ public class SpaceGemTeleporter extends Teleporter {
 
             BlockPos topRightBlock = playerSpawnAt.add(1,1,1);
 
-            for (int x = 0; x >= -2; --x){
+            for (int x = 0; x > -2; --x){
                 for(int y = 0; y >= -2; --y){
-                    for (int z = 0; z >= -2; --z){
+                    for (int z = 0; z > -2; --z){
                         BlockPos currentBlock = topRightBlock.add(x,y,z);
                         if (y != -2){
                             worldServerInstance.setBlockToAir(currentBlock);
-                            worldServerInstance.notifyBlockOfStateChange(currentBlock, Blocks.air);
+                            worldServerInstance.notifyNeighborsRespectDebug(currentBlock, Blocks.air);
                         } else {
                             if (worldServerInstance.isAirBlock(currentBlock)
                                     || worldServerInstance.getBlockState(currentBlock).getBlock() instanceof BlockLiquid) {
                                 worldServerInstance.setBlockState(currentBlock, Blocks.cobblestone.getDefaultState());
-                                worldServerInstance.notifyBlockOfStateChange(currentBlock, Blocks.cobblestone);
+                                worldServerInstance.notifyNeighborsRespectDebug(currentBlock, Blocks.cobblestone);
                             }
                         }
                     }
@@ -110,9 +110,7 @@ public class SpaceGemTeleporter extends Teleporter {
             }
             //check under player, for air block
             if (!found){
-                for(int i = 5; !found
-                        && i < startingPlayerPos.getY()
-                        && i < worldServerInstance.getActualHeight(); i++){
+                for(int i = 5; !found && i < startingPlayerPos.getY(); i++){
                     if(worldServerInstance.isAirBlock(currentSearchPos)
                             && worldServerInstance.isAirBlock(currentSearchPos.up())
                             && worldServerInstance.isSideSolid(currentSearchPos.down(), EnumFacing.UP)){
