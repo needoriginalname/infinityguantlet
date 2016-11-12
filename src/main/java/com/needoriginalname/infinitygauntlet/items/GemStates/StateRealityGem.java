@@ -249,7 +249,7 @@ public class StateRealityGem extends AbstractGemState{
         BlockTorch torchBlock = (BlockTorch) Block.getBlockFromName("torch");
         if (torchBlock.canPlaceBlockAt(worldIn, pos)){
             IBlockState state = torchBlock.getDefaultState().withProperty(BlockTorch.FACING, mop.sideHit);
-            BlockReplacementNode node = new BlockReplacementNode(null, state, pos, worldIn.getTotalWorldTime() + 2, worldIn, new Random().nextInt());
+            BlockReplacementNode node = new BlockReplacementNode(null, state, pos, worldIn.getTotalWorldTime() + 2, worldIn, new Random().nextInt(), (short) 0);
             proxy.addDeferredAction(node);
             //proxy.addDeferredAction(worldIn, queue);
         }

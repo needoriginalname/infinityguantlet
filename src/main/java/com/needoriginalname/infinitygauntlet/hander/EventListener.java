@@ -5,6 +5,7 @@ import com.needoriginalname.infinitygauntlet.items.ItemGauntlet;
 import com.needoriginalname.infinitygauntlet.items.ItemGem;
 import com.needoriginalname.infinitygauntlet.items.ModItems;
 import com.needoriginalname.infinitygauntlet.reference.Reference;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,22 +17,27 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Al on 5/17/2015.
  */
 public class EventListener {
+
+    //dim id -> block pos set : what block pos to stop update
+    private static HashMap<Integer, Set<BlockPos>> stopUpdateMap = new HashMap<Integer, Set<BlockPos>>();
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
@@ -46,6 +52,18 @@ public class EventListener {
     public void stitcherEventPre(TextureStitchEvent.Pre event){
         ResourceLocation rl = new ResourceLocation(Reference.MODID+ ":particles/tinygem");
         event.map.registerSprite(rl);
+    }
+
+
+    @SubscribeEvent
+    public void onNeighborNotifyEvent(BlockEvent.NeighborNotifyEvent event){
+        if (event.world != null && event.pos != null &&  stopUpdateMap.containsKey(event.world.provider.getDimensionId())){
+            Set set = stopUpdateMap.get(event.world.provider.getDimensionId());
+            if (set.contains(event.pos)){
+                set.remove(event.pos);
+                event.setCanceled(true);
+            }
+        }
     }
 
 
@@ -105,7 +123,7 @@ public class EventListener {
 
 
 
-    private  void changeEntityTarget(LivingSetAttackTargetEvent event) {
+    private void changeEntityTarget(LivingSetAttackTargetEvent event) {
         EntityPlayer result = null;
 
         int range = ConfigurationHandler.seekNewTargetRange;
@@ -130,4 +148,15 @@ public class EventListener {
         ((EntityLiving)event.entity).setAttackTarget(null);
     }
 
+    public static void addStopBlockUpdateList(World world, BlockPos blockPos) {
+        if (!stopUpdateMap.containsKey(world.provider.getDimensionId())){
+            stopUpdateMap.put(world.provider.getDimensionId(), new TreeSet<BlockPos>());
+        }
+
+        Set currentWorldSet = stopUpdateMap.get(world.provider.getDimensionId());
+        if (!currentWorldSet.contains(blockPos)){
+            currentWorldSet.add(blockPos);
+        }
+
+    }
 }

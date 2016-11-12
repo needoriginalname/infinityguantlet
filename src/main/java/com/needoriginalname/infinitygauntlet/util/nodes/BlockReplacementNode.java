@@ -1,7 +1,10 @@
 package com.needoriginalname.infinitygauntlet.util.nodes;
 
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
+import com.needoriginalname.infinitygauntlet.hander.EventListener;
 import com.sun.istack.internal.NotNull;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -58,8 +61,18 @@ public class BlockReplacementNode extends Node {
 
     @Override
     public void doAction() {
-        //get to see if something else already replaced this
-        if(oldState != newState && (oldState == null || getWorld().getBlockState(getBlockPos()) == oldState)){
+        //get to see if something else already replaced this, if not replace it
+        if((oldState != newState)
+                && (oldState == null ||
+                    getWorld().getBlockState(getBlockPos()) == oldState) ||
+
+                    //if replacing a liquid, do it regardless of state
+                    (oldState.getBlock().getMaterial() instanceof MaterialLiquid
+                            && oldState.getBlock().getMaterial() == getWorld().getBlockState(getBlockPos()).getBlock().getMaterial()) ){
+
+            if (getGenerationsLeft() > 0 && shouldStopBlockUpdate(oldState, newState)){
+                EventListener.addStopBlockUpdateList(getWorld(), getBlockPos());
+            }
 
             //replace the block with the new one, if applicable
             getWorld().destroyBlock(getBlockPos(), false);
@@ -97,21 +110,21 @@ public class BlockReplacementNode extends Node {
                     proxy.addDeferredAction(node);
                 }
 
-
             }
-
-
-
-
-
-
-
+        } else {
+            getWorld().notifyBlockOfStateChange(getBlockPos(), Blocks.air);
         }
-
-
-
     }
 
+    private boolean shouldStopBlockUpdate(IBlockState oldState, IBlockState newState) {
+
+        if (newState != Blocks.air || newState != null
+                && oldState.getBlock().getMaterial() instanceof MaterialLiquid){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
     public short getGenerationsLeft() {

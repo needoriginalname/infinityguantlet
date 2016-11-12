@@ -1,11 +1,13 @@
 package com.needoriginalname.infinitygauntlet.items.GemStates;
 
+import com.needoriginalname.infinitygauntlet.InfinityQuantletMod;
 import com.needoriginalname.infinitygauntlet.dimension.SoulGemCaptureTeleporter;
 import com.needoriginalname.infinitygauntlet.dimension.SoulGemReleaseTeleporter;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.network.MessageCustomSoundPacket;
 import com.needoriginalname.infinitygauntlet.network.PacketHandler;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
+import com.needoriginalname.infinitygauntlet.util.nodes.TransferPlayerNode;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,7 +92,9 @@ public class StateSoulGem extends AbstractGemState{
         }
 
         if (capturedPlayer != null && capturedPlayer instanceof EntityPlayerMP) {
-            worldIn.getMinecraftServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) capturedPlayer, player.dimension, new SoulGemReleaseTeleporter(worldIn, pos.getX(), pos.getY(), pos.getZ()));
+            EntityPlayerMP capturedPlayerMP = (EntityPlayerMP) capturedPlayer;
+            InfinityQuantletMod.proxy.addDeferredAction(new TransferPlayerNode(capturedPlayerMP, capturedPlayerMP.worldObj, worldIn.provider.getDimensionId(), capturedPlayerMP.getPosition(), pos, false));
+            //worldIn.getMinecraftServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) capturedPlayer, player.dimension, new SoulGemReleaseTeleporter(worldIn, pos.getX(), pos.getY(), pos.getZ()));
             stack.setTagCompound(removePlayerDataFromNBT(stack.getTagCompound()));
 
             EntityPlayerMP entityplayermp = (EntityPlayerMP) player;
@@ -175,9 +179,11 @@ public class StateSoulGem extends AbstractGemState{
             PacketHandler.dispatcher.sendToAllAround(new MessageCustomSoundPacket(soundfile, pos.getX(), pos.getY(), pos.getZ()), new NetworkRegistry.TargetPoint(((EntityPlayerMP) player).dimension, pos.getX(), pos.getY(), pos.getZ(), 16));
             CreateParticlePackets(pos, player, new int[0]);
         }
+        EntityPlayerMP targetedPlayerMP = (EntityPlayerMP) target;
+        InfinityQuantletMod.proxy.addDeferredAction(new TransferPlayerNode(targetedPlayerMP, targetedPlayerMP.worldObj, ConfigurationHandler.soulGemDimensionID, targetedPlayerMP.getPosition(), pos, true));
 
 
-       target.mcServer.getConfigurationManager().transferPlayerToDimension(target, ConfigurationHandler.soulGemDimensionID, new SoulGemCaptureTeleporter(world, (int)target.posX, (int)target.posY, (int)target.posZ));
+        //target.mcServer.getConfigurationManager().transferPlayerToDimension(target, ConfigurationHandler.soulGemDimensionID, new SoulGemCaptureTeleporter(world, (int)target.posX, (int)target.posY, (int)target.posZ));
 
         return stack;
     }

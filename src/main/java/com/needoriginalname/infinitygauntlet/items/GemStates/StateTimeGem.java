@@ -89,9 +89,9 @@ public class StateTimeGem extends AbstractGemState{
                     } else {
                         ((EntityHorse) e).setGrowingAge(24000);
                     }
-                }else if (e != null && e instanceof  EntityLiving) {
+                }else if (e != null) {
                     e.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 30*300, 10));
-                    e.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 30*30, 10));
+                    e.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 30*300, 10));
                 } else {
                     MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(worldIn, playerIn, false);
                     boolean b = false;

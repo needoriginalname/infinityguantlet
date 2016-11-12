@@ -40,7 +40,7 @@ public class InfinityQuantletMod {
         PacketHandler.registerPackets();
         proxy.registerKeyBinding();
 
-        FMLCommonHandler.instance().bus().register(new KeyBindingHandler());
+        MinecraftForge.EVENT_BUS.register(new KeyBindingHandler());
         proxy.CreateAndRegisterHandlers();
         ModItems.preInit(event);
         ModBlocks.preInit(event);

@@ -1,17 +1,18 @@
 package com.needoriginalname.infinitygauntlet.dimension;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -22,107 +23,125 @@ import java.util.Random;
 public class SpaceGemTeleporter extends Teleporter {
     private final WorldServer worldServerInstance;
     private final Random random;
+    private boolean clearPath;
+    private BlockPos newPos;
+
     public SpaceGemTeleporter(WorldServer worldServer){
         super(worldServer);
         this.worldServerInstance = worldServer;
         this.random = worldServer.rand;
+        this.clearPath = true;
+        this.newPos = null;
     }
+
+    public SpaceGemTeleporter(WorldServer worldServer, BlockPos newPos, boolean clearPath){
+        super(worldServer);
+        this.worldServerInstance = worldServer;
+        this.random = worldServer.rand;
+        this.clearPath = clearPath;
+        this.newPos = newPos;
+    }
+
+
 
     @Override
-    public void placeInPortal(Entity entityIn, float rotationYaw) {
+    public boolean makePortal(Entity entity) {
+        if (clearPath){
+            BlockPos playerSpawnAt = newPos;
+            if (playerSpawnAt.getY() < 5){
+                playerSpawnAt = new BlockPos(playerSpawnAt.getX(), 5, playerSpawnAt.getZ());
             }
 
-    @Override
-    public boolean placeInExistingPortal(Entity entityIn, float rotationYaw) {
-        return false;
-    }
 
-    @Override
-    public void removeStalePortalLocations(long worldTime) {
-    }
+            BlockPos topRightBlock = playerSpawnAt.add(1,1,1);
 
-    public void teleport(EntityLivingBase e){
-        if (e instanceof EntityPlayerMP && e.worldObj.provider.getDimensionId() != worldServerInstance.provider.getDimensionId()){
-            EntityPlayerMP player = (EntityPlayerMP) e;
-
-
-            boolean comingToTheEnd = worldServerInstance.provider.getDimensionId() == 1;
-
-            //a hotfix that prevents the player when traveling to the End on a never loaded chunk.
-            if (comingToTheEnd) {
-                player.travelToDimension(1);
-                return;
-            }
-
-            BlockPos pos = clearTeleportPath(worldServerInstance, player);
-            boolean comingFromEnd = player.dimension == 1;
-
-
-            //stop falling and motion
-            player.motionX = player.motionY = player.motionZ = 0.0D;
-            player.fallDistance = 0;
-
-            MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) e, worldServerInstance.provider.getDimensionId(), this);
-
-            //taken from Random Things PlayerUtil, used to provide teleportion logic that is specfic when teleporting from the end.
-            if (comingFromEnd){
-                e.setLocationAndAngles(pos.getX()+.5d, pos.getY()+.5d, pos.getZ()+.5d, player.rotationYaw, player.rotationPitch);
-                player.worldObj.spawnEntityInWorld(e);
-
-                player.worldObj.updateEntityWithOptionalForce(e, false);
-            } else {
-                player.worldObj.provider.createChunkGenerator().provideChunk(pos);
-                e.setLocationAndAngles(pos.getX()+.5d, pos.getY()+.5d, pos.getZ()+.5d, player.rotationYaw, player.rotationPitch);
-            }
-            player.playerNetServerHandler.setPlayerLocation(pos.getX()+.5d, pos.getY()+.5d, pos.getZ()+.5d, player.rotationYaw, player.rotationPitch);
-            player.removeExperienceLevel(0);
-            player.setPlayerHealthUpdated();
-            
-        }
-
-    }
-
-    private BlockPos clearTeleportPath(World world, EntityLivingBase entity) {
-        BlockPos vec = new BlockPos(entity);
-        double newX = (vec.getX() /world.provider.getMovementFactor());
-        double newY;
-        double newZ = vec.getZ() / world.provider.getMovementFactor();
-            newY = (float)entity.posY;
-            if (newY < 5 || newY >= world.getActualHeight() - 10)
-                newY = 5;
-
-        //find an air block to teleport toe
-            while (true){
-                if (newY > 5 && (world.getBlockState(new BlockPos(newX, newY, newZ)).getBlock() == Blocks.air || newY >= world.getActualHeight())){
-                    break;
-                }
-                newY++;
-            }
-
-            while (world.getBlockState(new BlockPos(newX, newY-1, newZ)).getBlock() == Blocks.air && newY > 5){
-                    newY--;
-            }
-            for (int q = (int)Math.floor(newY) - 2; q <= newY + 1; ++q){
-                for (int i = (int)Math.floor(newX) - 1; i <= newX + 1; ++i){
-                    for (int k = (int)Math.floor(newZ) - 1; k <= newZ + 1; ++k){
-                        //if block is empty fill it
-                        if (q == (int)Math.floor(newY - 2)){
-                            boolean r = world.setBlockState(new BlockPos(i, q, k), Blocks.cobblestone.getDefaultState());
-
-                            //assert r;
-                        }else{
-                            boolean r2 = world.setBlockState(new BlockPos(i, q, k), Blocks.air.getDefaultState());
-                            
-
-                            //assert r;
+            for (int x = 0; x >= -2; --x){
+                for(int y = 0; y >= -2; --y){
+                    for (int z = 0; z >= -2; --z){
+                        BlockPos currentBlock = topRightBlock.add(x,y,z);
+                        if (y != -2){
+                            worldServerInstance.setBlockToAir(currentBlock);
+                            worldServerInstance.notifyBlockOfStateChange(currentBlock, Blocks.air);
+                        } else {
+                            if (worldServerInstance.isAirBlock(currentBlock)
+                                    || worldServerInstance.getBlockState(currentBlock).getBlock() instanceof BlockLiquid) {
+                                worldServerInstance.setBlockState(currentBlock, Blocks.cobblestone.getDefaultState());
+                                worldServerInstance.notifyBlockOfStateChange(currentBlock, Blocks.cobblestone);
+                            }
                         }
                     }
                 }
             }
 
+        }
 
-        return new BlockPos(newX, newY, newZ);
+        return true;
     }
+
+    @Override
+    public boolean placeInExistingPortal(Entity entityIn, float rotationYaw) {
+        if (newPos == null){
+            newPos = entityIn.getPosition();
+        }
+
+        if (!clearPath){
+            entityIn.setLocationAndAngles(newPos.getX()+.5d, newPos.getY()+.5d, newPos.getZ()+.5d, entityIn.rotationYaw, entityIn.rotationPitch);
+            return true;
+        } else {
+            BlockPos startingPlayerPos = newPos;
+            BlockPos currentSearchPos = startingPlayerPos;
+
+            // can only go as low as 5 height level
+            if (currentSearchPos.getY() < 5){
+                currentSearchPos = new BlockPos(currentSearchPos.getX(), 5, currentSearchPos.getZ());
+            }
+
+            boolean found = false;
+            //check above player for an air block
+            while (worldServerInstance.isAirBlock(currentSearchPos) && currentSearchPos.getY() < worldServerInstance.getActualHeight()){
+
+                if(worldServerInstance.isAirBlock(currentSearchPos)
+                        && worldServerInstance.isAirBlock(currentSearchPos.up())
+                        && worldServerInstance.isSideSolid(currentSearchPos.down(), EnumFacing.UP)){
+                    found = true;
+                } else {
+                    currentSearchPos = currentSearchPos.up();
+                }
+            }
+            //check under player, for air block
+            if (!found){
+                for(int i = 5; !found
+                        && i < startingPlayerPos.getY()
+                        && i < worldServerInstance.getActualHeight(); i++){
+                    if(worldServerInstance.isAirBlock(currentSearchPos)
+                            && worldServerInstance.isAirBlock(currentSearchPos.up())
+                            && worldServerInstance.isSideSolid(currentSearchPos.down(), EnumFacing.UP)){
+                        found = true;
+                    } else {
+                        currentSearchPos = currentSearchPos.up();
+                    }
+                }
+            }
+
+            if (found){
+                entityIn.setLocationAndAngles(currentSearchPos.getX(), currentSearchPos.getY(), currentSearchPos.getZ(), entityIn.rotationYaw, entityIn.rotationPitch);
+            }
+
+            return found;
+
+
+
+
+        }
+
+    }
+
+    @Override
+    public void removeStalePortalLocations(long worldTime) {
+
+    }
+
+
 
 
 }

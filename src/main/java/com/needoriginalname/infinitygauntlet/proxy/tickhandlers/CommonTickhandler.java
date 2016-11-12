@@ -79,7 +79,7 @@ public class CommonTickhandler {
 
             if (ent instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) ent;
-                new SpaceGemTeleporter(player.mcServer.worldServerForDimension(newdim)).teleport(player);
+                // new SpaceGemTeleporter(player.mcServer.worldServerForDimension(newdim)).teleport(player);
             }
         }
 

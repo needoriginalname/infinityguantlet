@@ -5,6 +5,7 @@ import com.needoriginalname.infinitygauntlet.dimension.NonPortalTeleporter;
 import com.needoriginalname.infinitygauntlet.dimension.SpaceGemTeleporter;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.util.NBTHelper;
+import com.needoriginalname.infinitygauntlet.util.nodes.TransferPlayerNode;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -97,8 +98,8 @@ public class StateSpaceGem extends AbstractGemState{
 
 
 
-
-            InfinityQuantletMod.proxy.addDeferredDimTransfer(entityPlayerMP, resultId);
+            InfinityQuantletMod.proxy.addDeferredAction(new TransferPlayerNode(entityPlayerMP, entityPlayerMP.worldObj, resultId, entityPlayerMP.getPosition(), true));
+            //InfinityQuantletMod.proxy.addDeferredDimTransfer(entityPlayerMP, resultId);
                 /*
                 WorldServer nextDimServer = entityPlayerMP.mcServer.worldServerForDimension(resultId);
                 SpaceGemTeleporter teleporter = new SpaceGemTeleporter(nextDimServer);
