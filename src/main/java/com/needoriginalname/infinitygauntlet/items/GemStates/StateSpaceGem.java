@@ -1,29 +1,20 @@
 package com.needoriginalname.infinitygauntlet.items.GemStates;
 
 import com.needoriginalname.infinitygauntlet.InfinityQuantletMod;
-import com.needoriginalname.infinitygauntlet.dimension.NonPortalTeleporter;
-import com.needoriginalname.infinitygauntlet.dimension.SpaceGemTeleporter;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
-import com.needoriginalname.infinitygauntlet.util.NBTHelper;
 import com.needoriginalname.infinitygauntlet.util.nodes.TransferPlayerNode;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S29PacketSoundEffect;
-import net.minecraft.network.play.server.S2APacketParticles;
-import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
-import java.util.Random;
 
 /**
  * Created by Al on 5/16/2015.
