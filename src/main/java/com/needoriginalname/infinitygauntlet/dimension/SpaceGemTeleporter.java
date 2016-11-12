@@ -8,6 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -47,7 +48,7 @@ public class SpaceGemTeleporter extends Teleporter {
     @Override
     public boolean makePortal(Entity entity) {
         if (clearPath){
-            BlockPos playerSpawnAt = entity.getPosition();
+            BlockPos playerSpawnAt = newPos;
             if (playerSpawnAt.getY() < 5){
                 playerSpawnAt = new BlockPos(playerSpawnAt.getX(), 5, playerSpawnAt.getZ());
             }
@@ -55,9 +56,9 @@ public class SpaceGemTeleporter extends Teleporter {
 
             BlockPos topRightBlock = playerSpawnAt.add(1,1,1);
 
-            for (int x = 0; x > -2; --x){
+            for (int x = 0; x >= -2; --x){
                 for(int y = 0; y >= -2; --y){
-                    for (int z = 0; z > -2; --z){
+                    for (int z = 0; z >= -2; --z){
                         BlockPos currentBlock = topRightBlock.add(x,y,z);
                         if (y != -2){
                             worldServerInstance.setBlockToAir(currentBlock);
@@ -84,6 +85,12 @@ public class SpaceGemTeleporter extends Teleporter {
             newPos = entityIn.getPosition();
         }
 
+
+        newPos = new BlockPos(MathHelper.clamp_int(newPos.getX(), -29999850, 29999850),
+                MathHelper.clamp_int(newPos.getY(), 0, worldServerInstance.getHeight()),
+                MathHelper.clamp_int(newPos.getZ(), -29999850, 29999850));
+
+
         if (!clearPath){
             entityIn.setLocationAndAngles(newPos.getX()+.5d, newPos.getY()+.5d, newPos.getZ()+.5d, entityIn.rotationYaw, entityIn.rotationPitch);
             return true;
@@ -98,7 +105,7 @@ public class SpaceGemTeleporter extends Teleporter {
 
             boolean found = false;
             //check above player for an air block
-            while (worldServerInstance.isAirBlock(currentSearchPos) && currentSearchPos.getY() < worldServerInstance.getActualHeight()){
+            while (worldServerInstance.isAirBlock(currentSearchPos) && currentSearchPos.getY() < worldServerInstance.getActualHeight()-1){
 
                 if(worldServerInstance.isAirBlock(currentSearchPos)
                         && worldServerInstance.isAirBlock(currentSearchPos.up())
@@ -116,7 +123,7 @@ public class SpaceGemTeleporter extends Teleporter {
                             && worldServerInstance.isSideSolid(currentSearchPos.down(), EnumFacing.UP)){
                         found = true;
                     } else {
-                        currentSearchPos = currentSearchPos.up();
+                        currentSearchPos = new BlockPos(currentSearchPos.getX(), i, currentSearchPos.getZ());
                     }
                 }
             }
