@@ -45,7 +45,12 @@ public class TransferPlayerNode extends Node{
     public void doAction() {
 
         EntityPlayerMP player = (EntityPlayerMP) e;
-        Teleporter teleporter = new SpaceGemTeleporter(player.mcServer.worldServerForDimension(newWorldId), newPos, clearPath);
+        Teleporter teleporter;
+        if (newPos != null) {
+            teleporter = new SpaceGemTeleporter(player.mcServer.worldServerForDimension(newWorldId), newPos, clearPath);
+        } else {
+            teleporter = new SpaceGemTeleporter(player.mcServer.worldServerForDimension(newWorldId));
+        }
         player.mcServer.getConfigurationManager().transferPlayerToDimension(player, newWorldId, teleporter);
         if (oldWorld.provider.getDimensionId() == 1){
             if (player.isEntityAlive()){
