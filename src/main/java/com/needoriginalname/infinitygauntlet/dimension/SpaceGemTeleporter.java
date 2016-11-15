@@ -47,6 +47,11 @@ public class SpaceGemTeleporter extends Teleporter {
 
     @Override
     public boolean makePortal(Entity entity) {
+        if (newPos == null){
+            int i = 3;
+        }
+
+
         if (clearPath){
             BlockPos playerSpawnAt = newPos;
             if (playerSpawnAt.getY() < 5){
@@ -60,6 +65,7 @@ public class SpaceGemTeleporter extends Teleporter {
                 for(int y = 0; y >= -2; --y){
                     for (int z = 0; z >= -2; --z){
                         BlockPos currentBlock = topRightBlock.add(x,y,z);
+
                         if (y != -2){
                             worldServerInstance.setBlockToAir(currentBlock);
                             worldServerInstance.notifyNeighborsRespectDebug(currentBlock, Blocks.air);
@@ -81,7 +87,7 @@ public class SpaceGemTeleporter extends Teleporter {
 
     @Override
     public boolean placeInExistingPortal(Entity entityIn, float rotationYaw) {
-        if (newPos == null){
+      if (newPos == null){
             newPos = entityIn.getPosition();
         }
 
@@ -105,7 +111,7 @@ public class SpaceGemTeleporter extends Teleporter {
 
             boolean found = false;
             //check above player for an air block
-            while (worldServerInstance.isAirBlock(currentSearchPos) && currentSearchPos.getY() < worldServerInstance.getActualHeight()-1){
+            while (!found && currentSearchPos.getY() < worldServerInstance.getActualHeight()-1){
 
                 if(worldServerInstance.isAirBlock(currentSearchPos)
                         && worldServerInstance.isAirBlock(currentSearchPos.up())

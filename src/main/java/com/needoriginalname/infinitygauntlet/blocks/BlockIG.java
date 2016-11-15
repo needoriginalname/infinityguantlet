@@ -3,6 +3,7 @@ package com.needoriginalname.infinitygauntlet.blocks;
 import com.needoriginalname.infinitygauntlet.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.AxisAlignedBB;
 
 /**
  * Created by Al on 5/30/2015.
