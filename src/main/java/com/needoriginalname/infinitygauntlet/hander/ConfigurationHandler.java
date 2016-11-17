@@ -64,8 +64,6 @@ public class ConfigurationHandler {
             loadConfiguration();
             MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
         }
-
-
     }
 
     private static void loadConfiguration() {

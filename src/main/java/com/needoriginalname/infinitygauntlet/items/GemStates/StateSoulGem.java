@@ -1,8 +1,6 @@
 package com.needoriginalname.infinitygauntlet.items.GemStates;
 
 import com.needoriginalname.infinitygauntlet.InfinityQuantletMod;
-import com.needoriginalname.infinitygauntlet.dimension.SoulGemCaptureTeleporter;
-import com.needoriginalname.infinitygauntlet.dimension.SoulGemReleaseTeleporter;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.network.MessageCustomSoundPacket;
 import com.needoriginalname.infinitygauntlet.network.PacketHandler;
