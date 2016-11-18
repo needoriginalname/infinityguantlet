@@ -4,21 +4,13 @@ import com.google.common.base.Predicate;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.network.MessageVectorParticle;
 import com.needoriginalname.infinitygauntlet.network.PacketHandler;
-import com.needoriginalname.infinitygauntlet.util.LogHelper;
 import com.needoriginalname.infinitygauntlet.util.MiscUtil;
 import com.needoriginalname.infinitygauntlet.util.nodes.SmiteNode;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
@@ -27,10 +19,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 
-import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
+import static com.needoriginalname.infinitygauntlet.InfinityGuantletMod.proxy;
 
 /**
  * Created by Al on 5/16/2015.

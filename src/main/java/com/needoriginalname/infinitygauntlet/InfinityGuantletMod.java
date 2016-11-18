@@ -14,7 +14,6 @@ import com.needoriginalname.infinitygauntlet.proxy.CommonProxy;
 import com.needoriginalname.infinitygauntlet.reference.Reference;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -25,10 +24,10 @@ import net.minecraftforge.fml.common.event.*;
 
 
 @Mod(modid = Reference.MODID, version = Reference.VERSION, name = Reference.MODNAME, guiFactory = Reference.GUI_FACTORY_CLASS)
-public class InfinityQuantletMod {
+public class InfinityGuantletMod {
 
     @Mod.Instance(Reference.MODID)
-    public static InfinityQuantletMod instance;
+    public static InfinityGuantletMod instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static CommonProxy proxy;

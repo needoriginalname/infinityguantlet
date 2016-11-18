@@ -1,6 +1,6 @@
 package com.needoriginalname.infinitygauntlet.items.GemStates;
 
-import com.needoriginalname.infinitygauntlet.InfinityQuantletMod;
+import com.needoriginalname.infinitygauntlet.InfinityGuantletMod;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.network.MessageCustomSoundPacket;
 import com.needoriginalname.infinitygauntlet.network.PacketHandler;
@@ -91,7 +91,7 @@ public class StateSoulGem extends AbstractGemState{
 
         if (capturedPlayer != null && capturedPlayer instanceof EntityPlayerMP) {
             EntityPlayerMP capturedPlayerMP = (EntityPlayerMP) capturedPlayer;
-            InfinityQuantletMod.proxy.addDeferredAction(new TransferPlayerNode(capturedPlayerMP, capturedPlayerMP.worldObj, worldIn.provider.getDimensionId(), capturedPlayerMP.getPosition(), pos, false));
+            InfinityGuantletMod.proxy.addDeferredAction(new TransferPlayerNode(capturedPlayerMP, capturedPlayerMP.worldObj, worldIn.provider.getDimensionId(), capturedPlayerMP.getPosition(), pos, false));
             //worldIn.getMinecraftServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) capturedPlayer, player.dimension, new SoulGemReleaseTeleporter(worldIn, pos.getX(), pos.getY(), pos.getZ()));
             stack.setTagCompound(removePlayerDataFromNBT(stack.getTagCompound()));
 
@@ -178,7 +178,7 @@ public class StateSoulGem extends AbstractGemState{
             CreateParticlePackets(pos, player, new int[0]);
         }
         EntityPlayerMP targetedPlayerMP = (EntityPlayerMP) target;
-        InfinityQuantletMod.proxy.addDeferredAction(new TransferPlayerNode(targetedPlayerMP, targetedPlayerMP.worldObj, ConfigurationHandler.soulGemDimensionID, targetedPlayerMP.getPosition(), pos, true));
+        InfinityGuantletMod.proxy.addDeferredAction(new TransferPlayerNode(targetedPlayerMP, targetedPlayerMP.worldObj, ConfigurationHandler.soulGemDimensionID, targetedPlayerMP.getPosition(), pos, true));
 
 
         //target.mcServer.getConfigurationManager().transferPlayerToDimension(target, ConfigurationHandler.soulGemDimensionID, new SoulGemCaptureTeleporter(world, (int)target.posX, (int)target.posY, (int)target.posZ));
@@ -241,7 +241,7 @@ public class StateSoulGem extends AbstractGemState{
             if (playerIn.isSneaking()) {
                 itemStackIn = ReleaseMob(itemStackIn, worldIn, pos, playerIn);
             } else {
-                itemStackIn = CaptureMob(itemStackIn, worldIn, playerIn, (EntityLiving)e);
+                itemStackIn = CaptureMob(itemStackIn, worldIn, playerIn, e);
             }
 
         }

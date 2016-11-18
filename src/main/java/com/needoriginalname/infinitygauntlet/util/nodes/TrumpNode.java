@@ -6,7 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
+import static com.needoriginalname.infinitygauntlet.InfinityGuantletMod.proxy;
 
 /**
  * Created by Owner on 10/10/2016.

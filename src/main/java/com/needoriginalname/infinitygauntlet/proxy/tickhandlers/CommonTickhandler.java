@@ -1,6 +1,5 @@
 package com.needoriginalname.infinitygauntlet.proxy.tickhandlers;
 
-import com.needoriginalname.infinitygauntlet.dimension.SpaceGemTeleporter;
 import com.needoriginalname.infinitygauntlet.hander.ScheduleOverloadHandler;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
 import com.needoriginalname.infinitygauntlet.util.nodes.INode;
@@ -9,11 +8,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
 
-import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
+import static com.needoriginalname.infinitygauntlet.InfinityGuantletMod.proxy;
 
 /**
  * Created by Owner on 9/28/2016.

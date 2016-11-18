@@ -8,9 +8,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Queue;
 
-import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
+import static com.needoriginalname.infinitygauntlet.InfinityGuantletMod.proxy;
 
 /**
  * Created by Owner on 10/19/2016.

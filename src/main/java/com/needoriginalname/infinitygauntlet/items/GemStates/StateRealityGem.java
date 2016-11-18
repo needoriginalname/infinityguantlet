@@ -7,7 +7,6 @@ import com.needoriginalname.infinitygauntlet.util.nodes.TrumpNode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
@@ -31,7 +30,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
-import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
+import static com.needoriginalname.infinitygauntlet.InfinityGuantletMod.proxy;
 
 /**
  * Controls the Reality Gem's functionality

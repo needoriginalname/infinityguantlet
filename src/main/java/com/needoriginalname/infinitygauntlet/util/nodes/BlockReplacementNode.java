@@ -3,20 +3,16 @@ package com.needoriginalname.infinitygauntlet.util.nodes;
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.hander.EventListener;
 import com.sun.istack.internal.NotNull;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.needoriginalname.infinitygauntlet.InfinityQuantletMod.proxy;
+import static com.needoriginalname.infinitygauntlet.InfinityGuantletMod.proxy;
 
 /**
  * Created by Owner on 10/5/2016.
