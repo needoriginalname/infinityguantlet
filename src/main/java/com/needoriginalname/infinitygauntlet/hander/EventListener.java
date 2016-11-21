@@ -39,21 +39,6 @@ public class EventListener {
     //dim id -> block pos set : what block pos to stop update
     private static HashMap<Integer, Set<BlockPos>> stopUpdateMap = new HashMap<Integer, Set<BlockPos>>();
 
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void onPlayerTick(TickEvent.PlayerTickEvent event){
-        ParticleHandler.handleParticlesOnPlayer(event.player);
-    }
-
-
-
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void stitcherEventPre(TextureStitchEvent.Pre event){
-        ResourceLocation rl = new ResourceLocation(Reference.MODID+ ":particles/tinygem");
-        event.map.registerSprite(rl);
-    }
-
 
     @SubscribeEvent
     public void onNeighborNotifyEvent(BlockEvent.NeighborNotifyEvent event){

@@ -26,6 +26,7 @@ public class PatreonParticuleFx extends EntityFX {
     private final double startingY;
     private final double startingZ;
     private final int startingPoint;
+    private final float randomFloatOffset;
 
     public Entity getAttachedEntity() {
         return attachedEntity;
@@ -70,6 +71,7 @@ public class PatreonParticuleFx extends EntityFX {
 
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(particuleLoc.toString());
         setParticleIcon(sprite);
+        this.randomFloatOffset = new Random().nextFloat();
 
 
 
@@ -95,19 +97,11 @@ public class PatreonParticuleFx extends EntityFX {
         this.startingPoint = new Random().nextInt(1200);
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(particuleLoc.toString());
         setParticleIcon(sprite);
-
+        this.randomFloatOffset = new Random().nextFloat();
 
     }
 
 
-
-    boolean isAttachedEntityAlive() {
-        if (attachedEntity != null){
-            return attachedEntity.isEntityAlive();
-        } else {
-            return true;
-        }
-    }
 
     @Override
     public int getFXLayer() {
@@ -119,12 +113,18 @@ public class PatreonParticuleFx extends EntityFX {
      */
     @Override
     public void onUpdate() {
-        //not sure if the last 2 are actually yaw and pitch
+
         super.onUpdate();
+
         Vec3 newV = getParticuleVec();
         this.posX = newV.xCoord;
         this.posY = newV.yCoord;
         this.posZ = newV.zCoord;
+        //System.out.println(this.posX + " " + this.prevPosX);
+        if (attachedEntity == null || attachedEntity.isDead || worldObj.getEntityByID(attachedEntity.getEntityId()) == null){
+            LogHelper.info("Attached Entity gone, killing particle");
+            setDead();
+        }
 
 
 
@@ -134,6 +134,8 @@ public class PatreonParticuleFx extends EntityFX {
 
     }
 
+
+
     @Override
     public void renderParticle(WorldRenderer worldRendererIn, Entity entityIn, float partialTicks, float edgeLRdirectionX, float edgeUDdirectionY, float edgeLRdirectionZ,
                                float edgeUDdirectionX, float edgeUDdirectionZ) {
@@ -141,14 +143,10 @@ public class PatreonParticuleFx extends EntityFX {
 
 
         if (!attachedEntity.isInvisible() && !NBTHelper.getBoolean(attachedEntity, Names.HIDE_PARTICLE_SETTING)) {
-
-
             Vec3 colorV = getColorVector(partialTicks);
             this.particleRed = (float) colorV.xCoord / 255;
             this.particleGreen = (float) colorV.yCoord / 255;
             this.particleBlue = (float) colorV.zCoord / 255;
-
-
             super.renderParticle(worldRendererIn, entityIn, partialTicks, edgeLRdirectionX, edgeUDdirectionY, edgeLRdirectionZ, edgeUDdirectionX, edgeUDdirectionZ);
         }
     }

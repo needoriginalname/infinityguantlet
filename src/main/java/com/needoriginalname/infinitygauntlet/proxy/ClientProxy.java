@@ -1,6 +1,8 @@
 package com.needoriginalname.infinitygauntlet.proxy;
 
 import com.needoriginalname.infinitygauntlet.hander.KeyBindingHandler;
+import com.needoriginalname.infinitygauntlet.hander.ParticleHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 /**
@@ -14,5 +16,11 @@ public class ClientProxy extends CommonProxy {
         //ClientRegistry.registerKeyBinding(KeyBindingHandler.testParticule);
 
         super.registerKeyBinding();
+    }
+
+    @Override
+    public void CreateAndRegisterHandlers() {
+        MinecraftForge.EVENT_BUS.register(new ParticleHandler());
+        super.CreateAndRegisterHandlers();
     }
 }

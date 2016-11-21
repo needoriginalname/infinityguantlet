@@ -127,6 +127,7 @@ public class ConfigurationHandler {
         forcePatreonListToReload = configuration.getBoolean("forcePatreonListReload", Configuration.CATEGORY_GENERAL, false, "When Toggled to True, force Patreon List to reload. Toggled to False, does nothing.");
 
         if (forcePatreonListToReload){
+            ParticleHandler.resetTrackedParticules();
             if(RewardListHandler.loadList()){
                 LogHelper.info("Patreon list reloaded");
             } else {
