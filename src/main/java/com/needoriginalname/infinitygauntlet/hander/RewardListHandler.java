@@ -14,9 +14,12 @@ import java.util.Scanner;
  */
 public class RewardListHandler {
     static List<String> usernames = new ArrayList<String>();
+    static List<String> usernamesLC = new ArrayList<String>();
 
     public static boolean loadList(){
-        usernames.add("needoriginalname");
+        usernames = new ArrayList<String>();
+        usernamesLC = new ArrayList<String>();
+        usernames.add("needoriginalname"); //mod ev
         usernames.add("Geenium"); //created the textures and models
         usernames.add("nanosounds"); //inspiration for mod and doing first video
         usernames.add("lividcoffee"); //for being duncan.
@@ -28,22 +31,35 @@ public class RewardListHandler {
                 if (!usernames.contains(nextUsername)) {
                     usernames.add(nextUsername);
                 }
-                return true;
+
+
+
             }
+            for (String name: usernames) {
+                usernamesLC.add(name.toLowerCase());
+            }
+
+            System.out.print(usernamesLC);
+            return true;
         } catch (IOException e) {
             LogHelper.warn("Unable to load Donor List, defaulting to built in Contribution list.");
+        }
+
+        for (String name: usernames) {
+            usernamesLC.add(name.toLowerCase());
         }
         return false;
     }
 
     public static List<String> getRewardUsernames(){
-        if (usernames.size() == 0) loadList();
+        if (usernamesLC.size() == 0) loadList();
 
-        return usernames;
+        return usernamesLC;
     }
 
     public static String getRandomRewardUsername(){
-        List<String> list = getRewardUsernames();
+        if (usernames.size() == 0) loadList();
+        List<String> list = usernames;
         int index = new Random().nextInt(list.size());
         return list.get(index);
     }

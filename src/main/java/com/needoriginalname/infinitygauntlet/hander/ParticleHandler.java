@@ -1,61 +1,83 @@
 package com.needoriginalname.infinitygauntlet.hander;
 
 import com.needoriginalname.infinitygauntlet.particles.PatreonParticuleFx;
+import com.needoriginalname.infinitygauntlet.reference.Reference;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Owner on 10/22/2016.
  */
 public class ParticleHandler {
     private static Minecraft mc = Minecraft.getMinecraft();
-    static World w = mc.theWorld;
-    static TextureManager renderEngine = mc.renderEngine;
 
     public static Map<EntityPlayer, PatreonParticuleFx> trackedParticules = new HashMap<EntityPlayer, PatreonParticuleFx>();
-    public static Set<EntityPlayer> trackedPlayers = new HashSet<EntityPlayer>();
-
-    public static boolean handleParticlesOnPlayer(EntityPlayer player){
-        if (!trackedPlayers.contains(player) && w.getEntityByID(player.getEntityId()) != null && player.getDistanceToEntity(mc.thePlayer) < 128){
-            attachParticleOnPlayer(player);
-        } else {
-            if(trackedPlayers.contains(player) && (player.getDistanceToEntity(mc.thePlayer) >= 128 || mc.theWorld.getEntityByID(player.getEntityId()) == null  )){
-                detachParticleOnPlayer(player);
-            }
+    //public static Set<EntityPlayer> trackedPlayers = new HashSet<EntityPlayer>();
 
 
-            //checks to see if particule is dead
-            if(trackedPlayers.contains(player)){
-                if (trackedParticules.containsKey(player)){
-                    //kill particle if sent to new dim
-                    if (trackedParticules.get(player).dimension != mc.thePlayer.dimension){
-                        trackedParticules.get(player).setDead();
-                    }
 
-                    //stop tracking particule if dead
-                    if (trackedParticules.get(player).isDead){
-                        detachParticleOnPlayer(player);
-                    }
-                }
-            }
-        }
 
-        return false;
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void stitcherEventPre(TextureStitchEvent.Pre event){
+        ResourceLocation rl = new ResourceLocation(Reference.MODID+ ":particles/tinygem");
+        event.map.registerSprite(rl);
     }
 
-    private static void attachParticleOnPlayer(EntityPlayer player) {
-        trackedPlayers.add(player);
+   @SubscribeEvent
+   @SideOnly(Side.CLIENT)
+   public void onEntityJoinWorld(EntityJoinWorldEvent event){
+       if (event.entity == Minecraft.getMinecraft().thePlayer){
+            resetTrackedParticules();
+       }
+   }
 
-        if (RewardListHandler.getRewardUsernames().contains(player.getDisplayNameString())){
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onPlayerTick(TickEvent.PlayerTickEvent event){
+        if (event.side.isServer()) return;
+        EntityPlayer currentplayer = Minecraft.getMinecraft().thePlayer;
+        if (currentplayer.worldObj == event.player.worldObj
+                && event.player.getDistanceToEntity(currentplayer) < 64){
+            attachParticleOnPlayer(event.player);
+        } else {
+            detachParticleOnPlayer(event.player);
+        }
+
+
+    }
+
+
+    public static void resetTrackedParticules(){
+        trackedParticules.clear();
+    }
+
+
+    private static void attachParticleOnPlayer(EntityPlayer player) {
+        //checks to see if it can attach particule to player
+
+        if (!trackedParticules.containsKey(player) && RewardListHandler.getRewardUsernames().contains(player.getDisplayNameString().toLowerCase())){
             PatreonParticuleFx particule = new PatreonParticuleFx(player.worldObj, player);
             trackedParticules.put(player,  particule);
             Minecraft.getMinecraft().effectRenderer.addEffect(particule);
@@ -67,8 +89,7 @@ public class ParticleHandler {
 
 
     public static boolean detachParticleOnPlayer(EntityPlayer player){
-        if (trackedPlayers.contains(player)){
-            trackedPlayers.remove(player);
+
             if (trackedParticules.containsKey(player)){
                 PatreonParticuleFx fx = trackedParticules.remove(player);
                 fx.setDead();
@@ -80,7 +101,7 @@ public class ParticleHandler {
 
 
 
-        }
+
         return false;
     }
 
@@ -88,6 +109,7 @@ public class ParticleHandler {
 
     public static EntityFX spawnParticule(String name, double x, double y, double z, double speedX, double speedY, double speedZ){
         if (mc != null && mc.getRenderViewEntity() != null && mc.effectRenderer != null){
+            World w = Minecraft.getMinecraft().theWorld;
             int particleSetting = mc.gameSettings.particleSetting;
             if (particleSetting == 1 && w.rand.nextInt(3) == 0){
                 particleSetting = 2;
@@ -112,5 +134,7 @@ public class ParticleHandler {
         }
         return null;
     }
+
+
 
 }
