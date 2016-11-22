@@ -32,6 +32,7 @@ public class ClintonNode extends Node {
         if (getWorld().canBlockBePlaced(Blocks.chest,chestPos, true, side, player, null)){
             getWorld().setBlockState(chestPos, Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, player.getHorizontalFacing().getOpposite()));
             TileEntityChest tile = (TileEntityChest) getWorld().getTileEntity(chestPos);
+            tile.setCustomName("Hillary's Email Server");
             if (tile != null){
                 for (int i = 0; i < 27; i++) {
                     ItemStack stack = new ItemStack(Items.paper, 64);
