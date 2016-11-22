@@ -82,7 +82,7 @@ public class StateRealityGem extends AbstractGemState{
 
             if ((!ConfigurationHandler.isReplaceBlockListWhiteList ^ ConfigurationHandler.replaceBlockList.contains(s.getBlock().getUnlocalizedName())
                 && (!ConfigurationHandler.isReplaceBlockListWithWhiteList ^ ConfigurationHandler.replaceBlockListWith.contains(blockstate.getBlock().getUnlocalizedName())))
-                && (ConfigurationHandler.allowNonFullBlocksToBeReplacedWith || blockstate.getBlock().isFullBlock()))
+                && (ConfigurationHandler.allowNonFullBlocksToBeReplacedWith || blockstate.getBlock() == Blocks.air || blockstate.getBlock().isFullBlock()))
             {
 
                 if (isGauntletMode) {
