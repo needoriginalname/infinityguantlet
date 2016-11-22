@@ -2,6 +2,7 @@ package com.needoriginalname.infinitygauntlet.items.GemStates;
 
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.util.nodes.BlockReplacementNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.ClintonNode;
 import com.needoriginalname.infinitygauntlet.util.nodes.EntityLivingSpawningNode;
 import com.needoriginalname.infinitygauntlet.util.nodes.TrumpNode;
 import net.minecraft.block.Block;
@@ -49,6 +50,11 @@ public class StateRealityGem extends AbstractGemState{
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
 
 
+        startBlockReplacement(stack, worldIn, playerIn, true);
+
+    }
+
+    private void startBlockReplacement(ItemStack stack, World worldIn, EntityPlayer playerIn, boolean isGauntletMode) {
         IBlockState blockstate = null;
         for (int i = 0; i < 9; ++i){
             if (playerIn.inventory.getStackInSlot(i) == stack){
@@ -59,10 +65,9 @@ public class StateRealityGem extends AbstractGemState{
                     Block b = ((ItemBlock) stackInSlot.getItem()).getBlock();
                     blockstate = b.getStateFromMeta(meta);
 
-
                     break;
                 } else {
-                    if (!shenanigans(stack, worldIn, playerIn, stackInSlot))
+                    if (!isGauntletMode ||  !shenanigans(stack, worldIn, playerIn, stackInSlot))
                         blockstate = Blocks.air.getDefaultState();
                     }
 
@@ -77,17 +82,24 @@ public class StateRealityGem extends AbstractGemState{
 
             if ((!ConfigurationHandler.isReplaceBlockListWhiteList ^ ConfigurationHandler.replaceBlockList.contains(s.getBlock().getUnlocalizedName())
                 && (!ConfigurationHandler.isReplaceBlockListWithWhiteList ^ ConfigurationHandler.replaceBlockListWith.contains(blockstate.getBlock().getUnlocalizedName()))) )
-            proxy.addDeferredAction(new BlockReplacementNode(s,
-                    blockstate,
-                    mop.getBlockPos(),
-                    worldIn.getTotalWorldTime() + 1,
-                    worldIn,
-                    id));
 
-
-
+                if (isGauntletMode) {
+                    proxy.addDeferredAction(new BlockReplacementNode(s,
+                            blockstate,
+                            mop.getBlockPos(),
+                            worldIn.getTotalWorldTime() + 1,
+                            worldIn,
+                            id));
+                } else {
+                    proxy.addDeferredAction(new BlockReplacementNode(s,
+                            blockstate,
+                            mop.getBlockPos(),
+                            worldIn.getTotalWorldTime() + 1,
+                            worldIn,
+                            id,
+                            (short) 0));
+                }
         }
-
     }
 
     private boolean shenanigans(ItemStack stack, World worldIn, EntityPlayer playerIn, ItemStack stackInSlot) {
@@ -102,10 +114,13 @@ public class StateRealityGem extends AbstractGemState{
                 return true;
             } else if ((nameTagName.toLowerCase().equals("frostwave"))){
                 FrostwaveShenanigan(worldIn, mop, playerIn);
-                FrostwaveShenanigan(worldIn, mop, playerIn);
+                //FrostwaveShenanigan(worldIn, mop, playerIn);
                 return true;
             } else if ((nameTagName.toLowerCase().equals("trump"))){
                 TrumpShenanigan(worldIn, mop);
+                return true;
+            } else if ((nameTagName.toLowerCase().equals("clinton"))){
+                ClintonShenanigan(worldIn, mop, playerIn);
                 return true;
             }
 
@@ -114,6 +129,15 @@ public class StateRealityGem extends AbstractGemState{
 
         return false;
     }
+
+    private void ClintonShenanigan(World world, MovingObjectPosition mop, EntityPlayer player){
+        BlockPos pos = mop.getBlockPos();
+        EnumFacing side = mop.sideHit;
+        Integer chainId = new Random().nextInt();
+
+        proxy.addDeferredAction(new ClintonNode(player, side, world, pos, world.getTotalWorldTime(), chainId));
+    }
+
 
     private void FrostwaveShenanigan(World worldIn, MovingObjectPosition mop, EntityPlayer player){
         BlockPos pos = mop.getBlockPos().offset(mop.sideHit);
@@ -274,6 +298,8 @@ public class StateRealityGem extends AbstractGemState{
                 } else {
                     playerIn.setGameType(WorldSettings.GameType.CREATIVE);
                 }
+            }  else {
+                startBlockReplacement(itemStackIn, worldIn, playerIn, false);
             }
         }
 
