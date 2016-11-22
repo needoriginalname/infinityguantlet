@@ -66,8 +66,10 @@ public class BlockReplacementNode extends Node {
                     (oldState.getBlock().getMaterial() instanceof MaterialLiquid
                             && oldState.getBlock().getMaterial() == getWorld().getBlockState(getBlockPos()).getBlock().getMaterial()) ){
 
-            if (getGenerationsLeft() > 0 && shouldStopBlockUpdate(oldState, newState)){
-                EventListener.addStopBlockUpdateList(getWorld(), getBlockPos());
+            if (oldState.getBlock().getMaterial() instanceof MaterialLiquid) {
+                if (shouldStopBlockUpdate(oldState, newState)) {
+                    EventListener.addStopBlockUpdateList(getWorld(), getBlockPos());
+                }
             }
 
             //replace the block with the new one, if applicable
@@ -113,10 +115,20 @@ public class BlockReplacementNode extends Node {
     }
 
     private boolean shouldStopBlockUpdate(IBlockState oldState, IBlockState newState) {
+        byte flag = ConfigurationHandler.stopBlockUpdateForLiquids;
+        boolean b = false;
+        if ((getGenerationsLeft() > 0) && ((flag & 1) == 1)){
+            b = true;
+        }
+
+        if (getGenerationsLeft() == 0 && ((flag & 2) == 2)){
+            b = true;
+        }
+
 
         if (newState != Blocks.air || newState != null
                 && oldState.getBlock().getMaterial() instanceof MaterialLiquid){
-            return true;
+            return b;
         } else {
             return false;
         }

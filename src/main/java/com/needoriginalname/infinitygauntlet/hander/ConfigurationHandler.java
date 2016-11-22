@@ -63,6 +63,7 @@ public class ConfigurationHandler {
     public static boolean isReplaceBlockListWhiteList;
     public static List<String> replaceBlockListWith;
     public static boolean isReplaceBlockListWithWhiteList;
+    public static byte stopBlockUpdateForLiquids;
 
 
     public static void init(File configFile){
@@ -109,7 +110,7 @@ public class ConfigurationHandler {
 
 
         maxDepthOfBlockReplacement = (short) configuration.getInt("maxDepthOfBlockReplacement", Configuration.CATEGORY_GENERAL, 32, 1, 50, "Max depth of Block replacement algorithm for the Reality Gem");
-        maxActionsPerTick = configuration.getInt("maxActionsPerTick", Configuration.CATEGORY_GENERAL, 15, 1, 50, "Limits the number of actions per tick per player action");
+        maxActionsPerTick = configuration.getInt("maxActionsPerTick", Configuration.CATEGORY_GENERAL, 25, 1, 150, "Limits the number of actions per tick per player action");
 
         soulGemDimensionID = configuration.getInt("soulGemDimensionID", Configuration.CATEGORY_GENERAL, -10, Short.MIN_VALUE, Short.MAX_VALUE, "dimension ID for Soul Gem Dimension");
         soulGemBiomeID = configuration.getInt("soulGemBiomeID", Configuration.CATEGORY_GENERAL, 50, 50, Short.MAX_VALUE, "Biome ID for Soul Gem Biome");
@@ -120,7 +121,7 @@ public class ConfigurationHandler {
         realityGauntletChargeTime = configuration.getInt("realityGauntletChargeTime", Configuration.CATEGORY_GENERAL, 40, 20, 72000, "Number of ticks to charge up the gauntlet's reality gem ability.");
         timeGauntletChargeTime = configuration.getInt("timeGauntletChargeTime", Configuration.CATEGORY_GENERAL, 40, 20, 72000, "Number of ticks to charge up the gauntlet's time gem ability.");
         soulGauntletChargeTime = configuration.getInt("soulGauntletChargeTime", Configuration.CATEGORY_GENERAL, 40, 20, 72000, "Number of ticks to charge up the gauntlet's soul gem ability.");
-
+        stopBlockUpdateForLiquids = (byte) configuration.getInt("stopBlockUpdateForLiquids", Configuration.CATEGORY_GENERAL, 3, 0, 3, "0 to not stop block updates when clearing out liquids with reality gem, 1 when not at maxDepth, 2 when at maxDepth, 3 for both.");
         String[] defaultDim = new String[3];
         defaultDim[0] = "0"; defaultDim[1] = "-1"; defaultDim[2] = "1";
 
