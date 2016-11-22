@@ -81,7 +81,9 @@ public class StateRealityGem extends AbstractGemState{
             IBlockState s = worldIn.getBlockState(mop.getBlockPos());
 
             if ((!ConfigurationHandler.isReplaceBlockListWhiteList ^ ConfigurationHandler.replaceBlockList.contains(s.getBlock().getUnlocalizedName())
-                && (!ConfigurationHandler.isReplaceBlockListWithWhiteList ^ ConfigurationHandler.replaceBlockListWith.contains(blockstate.getBlock().getUnlocalizedName()))) )
+                && (!ConfigurationHandler.isReplaceBlockListWithWhiteList ^ ConfigurationHandler.replaceBlockListWith.contains(blockstate.getBlock().getUnlocalizedName())))
+                && (ConfigurationHandler.allowNonFullBlocksToBeReplacedWith || blockstate.getBlock().isFullBlock()))
+            {
 
                 if (isGauntletMode) {
                     proxy.addDeferredAction(new BlockReplacementNode(s,
@@ -99,6 +101,7 @@ public class StateRealityGem extends AbstractGemState{
                             id,
                             (short) 0));
                 }
+            }
         }
     }
 

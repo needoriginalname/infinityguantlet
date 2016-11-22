@@ -2,12 +2,10 @@ package com.needoriginalname.infinitygauntlet.hander;
 
 import com.needoriginalname.infinitygauntlet.reference.Reference;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import sun.rmi.runtime.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,6 +62,7 @@ public class ConfigurationHandler {
     public static List<String> replaceBlockListWith;
     public static boolean isReplaceBlockListWithWhiteList;
     public static byte stopBlockUpdateForLiquids;
+    public static boolean allowNonFullBlocksToBeReplacedWith;
 
 
     public static void init(File configFile){
@@ -147,7 +146,7 @@ public class ConfigurationHandler {
         replaceBlockListWith = new ArrayList<String>();
         isReplaceBlockListWhiteList = configuration.getBoolean("isReplaceBlockListWhiteList", Configuration.CATEGORY_GENERAL, false, "replaceBlockList is a whitelist if true, blacklist if false");
         isReplaceBlockListWithWhiteList = configuration.getBoolean("isReplaceBlockListWithWhiteList", Configuration.CATEGORY_GENERAL, false, "replaceBlockListWith is a whitelist if true, blacklist if false");
-
+        allowNonFullBlocksToBeReplacedWith = configuration.getBoolean("allowNonFullBlocksToBeReplacedWith", Configuration.CATEGORY_GENERAL, false, "allows the reality gem to replace blocks with a non full block, EX: chests, anvils, crops, etc");
         for(String s: configuration.getStringList("replaceBlockList", Configuration.CATEGORY_GENERAL, new String[]{}, "a white or black list of unlocalized names for  infinity gauntlet to replace.")){
             replaceBlockList.add(s);
         }
@@ -156,7 +155,7 @@ public class ConfigurationHandler {
 
 
         for (String s: configuration.getStringList("replaceBlockListWith", Configuration.CATEGORY_GENERAL,
-                new String[]{"tile.anvil"},
+                new String[]{},
                 "a white or black list of unlocalized names for infinity gauntlet to replace block with.")){
             replaceBlockListWith.add(s);
         }
