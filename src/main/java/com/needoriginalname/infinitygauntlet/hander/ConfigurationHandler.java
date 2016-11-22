@@ -155,7 +155,7 @@ public class ConfigurationHandler {
 
 
         for (String s: configuration.getStringList("replaceBlockListWith", Configuration.CATEGORY_GENERAL,
-                new String[]{},
+                new String[]{"tile.chest", "tile.anvil", "tile.chestTrap"},
                 "a white or black list of unlocalized names for infinity gauntlet to replace block with.")){
             replaceBlockListWith.add(s);
         }
