@@ -2,6 +2,7 @@ package com.needoriginalname.infinitygauntlet.hander;
 
 import com.needoriginalname.infinitygauntlet.reference.Reference;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -9,6 +10,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import sun.rmi.runtime.Log;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Al on 5/18/2015.
@@ -56,6 +59,10 @@ public class ConfigurationHandler {
     public static int soulGauntletChargeTime;
     public static int spaceGauntletChargeTime;
     public static int timeGauntletChargeTime;
+    public static List<String> replaceBlockList;
+    public static boolean isReplaceBlockListWhiteList;
+    public static List<String> replaceBlockListWith;
+    public static boolean isReplaceBlockListWithWhiteList;
 
 
     public static void init(File configFile){
@@ -133,10 +140,20 @@ public class ConfigurationHandler {
             } else {
                 LogHelper.error("Failed to reload Patreon list");
             }
-
         }
 
+        replaceBlockList = new ArrayList<String>();
+        replaceBlockListWith = new ArrayList<String>();
+        isReplaceBlockListWhiteList = configuration.getBoolean("isReplaceBlockListWhiteList", Configuration.CATEGORY_GENERAL, false, "replaceBlockList is a whitelist if true, blacklist if false");
+        isReplaceBlockListWithWhiteList = configuration.getBoolean("isReplaceBlockListWithWhiteList", Configuration.CATEGORY_GENERAL, false, "replaceBlockListWith is a whitelist if true, blacklist if false");
 
+        for(String s: configuration.getStringList("replaceBlockList", Configuration.CATEGORY_GENERAL, new String[]{}, "a white or black list of unlocalized names for  infinity gauntlet to replace.")){
+            replaceBlockList.add(s);
+        }
+
+        for (String s: configuration.getStringList("replaceBlockListWith", Configuration.CATEGORY_GENERAL, new String[]{}, "a white or black list of unlocalized names for infinity gauntlet to replace block with.")){
+            replaceBlockListWith.add(s);
+        }
 
 
 

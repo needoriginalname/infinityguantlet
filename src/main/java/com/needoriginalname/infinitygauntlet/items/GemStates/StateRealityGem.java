@@ -73,7 +73,11 @@ public class StateRealityGem extends AbstractGemState{
         Integer id = new Random().nextInt();
 
         if (blockstate != null && mop != null && mop.getBlockPos() != null){
-            proxy.addDeferredAction(new BlockReplacementNode(worldIn.getBlockState(mop.getBlockPos()),
+            IBlockState s = worldIn.getBlockState(mop.getBlockPos());
+
+            if ((!ConfigurationHandler.isReplaceBlockListWhiteList ^ ConfigurationHandler.replaceBlockList.contains(s.getBlock().getUnlocalizedName())
+                && (!ConfigurationHandler.isReplaceBlockListWithWhiteList ^ ConfigurationHandler.replaceBlockListWith.contains(blockstate.getBlock().getUnlocalizedName()))) )
+            proxy.addDeferredAction(new BlockReplacementNode(s,
                     blockstate,
                     mop.getBlockPos(),
                     worldIn.getTotalWorldTime() + 1,
