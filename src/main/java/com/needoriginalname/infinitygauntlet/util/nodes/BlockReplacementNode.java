@@ -66,7 +66,7 @@ public class BlockReplacementNode extends Node {
                     (oldState.getBlock().getMaterial() instanceof MaterialLiquid
                             && oldState.getBlock().getMaterial() == getWorld().getBlockState(getBlockPos()).getBlock().getMaterial()) ){
 
-            if (oldState.getBlock().getMaterial() instanceof MaterialLiquid) {
+            if (oldState != null && oldState.getBlock() != null && oldState.getBlock().getMaterial() instanceof MaterialLiquid) {
                 if (shouldStopBlockUpdate(oldState, newState)) {
                     EventListener.addStopBlockUpdateList(getWorld(), getBlockPos());
                 }
