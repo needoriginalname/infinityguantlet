@@ -1,10 +1,7 @@
 package com.needoriginalname.infinitygauntlet.items.GemStates;
 
 import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
-import com.needoriginalname.infinitygauntlet.util.nodes.BlockReplacementNode;
-import com.needoriginalname.infinitygauntlet.util.nodes.ClintonNode;
-import com.needoriginalname.infinitygauntlet.util.nodes.EntityLivingSpawningNode;
-import com.needoriginalname.infinitygauntlet.util.nodes.TrumpNode;
+import com.needoriginalname.infinitygauntlet.util.nodes.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -117,7 +114,6 @@ public class StateRealityGem extends AbstractGemState{
                 return true;
             } else if ((nameTagName.toLowerCase().equals("frostwave"))){
                 FrostwaveShenanigan(worldIn, mop, playerIn);
-                //FrostwaveShenanigan(worldIn, mop, playerIn);
                 return true;
             } else if ((nameTagName.toLowerCase().equals("trump"))){
                 TrumpShenanigan(worldIn, mop);
@@ -125,12 +121,23 @@ public class StateRealityGem extends AbstractGemState{
             } else if ((nameTagName.toLowerCase().equals("clinton"))){
                 ClintonShenanigan(worldIn, mop, playerIn);
                 return true;
+            } else if ((nameTagName.toLowerCase().equals("cyanrose"))){
+                CyanShenanigan(worldIn, mop, playerIn);
+                return true;
             }
 
 
         }
 
         return false;
+    }
+
+    private void CyanShenanigan(World worldIn, MovingObjectPosition mop, EntityPlayer playerIn) {
+        BlockPos pos = mop.getBlockPos();
+        EnumFacing side = mop.sideHit;
+        Integer chainId = new Random().nextInt();
+        proxy.addDeferredAction(new CyanNode(worldIn, pos, worldIn.getTotalWorldTime(), chainId, side, playerIn));
+
     }
 
     private void ClintonShenanigan(World world, MovingObjectPosition mop, EntityPlayer player){
