@@ -1,6 +1,7 @@
 package com.needoriginalname.infinitygauntlet.particles;
 
 
+import com.needoriginalname.infinitygauntlet.hander.ConfigurationHandler;
 import com.needoriginalname.infinitygauntlet.reference.Names;
 import com.needoriginalname.infinitygauntlet.reference.Reference;
 import com.needoriginalname.infinitygauntlet.util.LogHelper;
@@ -142,7 +143,7 @@ public class PatreonParticuleFx extends EntityFX {
 
 
 
-        if (!attachedEntity.isInvisible() && !NBTHelper.getBoolean(attachedEntity, Names.HIDE_PARTICLE_SETTING)) {
+        if (!ConfigurationHandler.disablePatreonParticule && !attachedEntity.isInvisible() && !NBTHelper.getBoolean(attachedEntity, Names.HIDE_PARTICLE_SETTING)) {
             Vec3 colorV = getColorVector(partialTicks);
             this.particleRed = (float) colorV.xCoord / 255;
             this.particleGreen = (float) colorV.yCoord / 255;

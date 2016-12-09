@@ -63,7 +63,7 @@ public class ConfigurationHandler {
     public static boolean isReplaceBlockListWithWhiteList;
     public static byte stopBlockUpdateForLiquids;
     public static boolean allowNonFullBlocksToBeReplacedWith;
-
+    public static boolean disablePatreonParticule;
 
     public static void init(File configFile){
         if (configuration == null){
@@ -160,6 +160,7 @@ public class ConfigurationHandler {
             replaceBlockListWith.add(s);
         }
 
+        disablePatreonParticule = configuration.getBoolean("disablePatreonParticule", Configuration.CATEGORY_GENERAL, false, "disable all Patreon Particules on the client");
 
 
         if (configuration.hasChanged()){
